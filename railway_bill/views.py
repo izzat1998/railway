@@ -46,8 +46,8 @@ class RailwayBillUpdate(UpdateView):
     template_name = 'railway_bill/railway_update.html'
 
     def post(self, request, *args, **kwargs):
-        railway_bill_update(request.POST, kwargs['pk'])
-        return HttpResponseRedirect(reverse_lazy('railway-bill-update', kwargs={'pk': kwargs['pk']}))
+        pk = railway_bill_update(request.POST, kwargs['pk'])
+        return HttpResponseRedirect(reverse_lazy('railway-bill-update', kwargs={'pk': pk}))
 
 
 class RailwayBillDelete(DeleteView):

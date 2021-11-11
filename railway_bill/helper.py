@@ -50,7 +50,8 @@ def railway_bill_update(update_data, pk, ):
     file_original = open(create_railway_document(ready_data, container)[1])
     ready_data['file'] = file_draft.name.replace('media/', '')
     ready_data['file_original'] = file_original.name.replace('media/', '')
-    RailwayBill.objects.filter(pk=pk).update(**ready_data)
+    railway_bill = RailwayBill.objects.filter(pk=pk).update(**ready_data)
+    return railway_bill.pk
 
 
 def create_railway_document(ready_data, container):
@@ -79,7 +80,6 @@ def create_railway_document(ready_data, container):
                     f'media/documents/original/' + ready_data['train'].name + '_' + container.name + ".docx"]
     except FileExistsError:
         raise FileExistsError
-
 
 
 def convert_excel_data_to_railway_data(train_id, excel_data):
