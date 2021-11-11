@@ -1,6 +1,7 @@
 import os
 import zipfile
 from pyexpat import model
+from time import sleep
 
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse_lazy
@@ -46,6 +47,7 @@ class RailwayBillUpdate(UpdateView):
 
     def post(self, request, *args, **kwargs):
         railway_bill_update(request.POST, kwargs['pk'])
+        sleep(1)
         return HttpResponseRedirect(reverse_lazy('railway-bill-update', kwargs={'pk': kwargs['pk']}))
 
 
