@@ -77,14 +77,13 @@ WSGI_APPLICATION = 'railway.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'izzat',
-        'USER': 'postgres',
+        'NAME': 'railway',
+        'USER': 'izzat',
         'HOST': 'localhost',
         'PASSWORD': '1',
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
