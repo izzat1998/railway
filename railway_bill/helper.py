@@ -62,14 +62,24 @@ def create_railway_document(ready_data, container):
         ready_data['type'] = container.weight_type_code
         doc_1.render(ready_data)
         doc_2.render(ready_data)
-        doc_1.save(
-            'media/documents/draft/' + ready_data['train'].name + '_' + container.name + ".docx")
-        doc_2.save(
-            'media/documents/original/' + ready_data['train'].name + '_' + container.name + ".docx")
+        if isinstance(ready_data['train'], int):
+            name = Train.objects.get(id=ready_data['train']).name
+            doc_1.save(
+                'media/documents/draft/' + name + '_' + container.name + ".docx")
+            doc_2.save(
+                'media/documents/original/' + name + '_' + container.name + ".docx")
+            return [f'media/documents/draft/' + name + '_' + container.name + ".docx",
+                    f'media/documents/original/' + name + '_' + container.name + ".docx"]
+        else:
+            doc_1.save(
+                'media/documents/draft/' + ready_data['train'].name + '_' + container.name + ".docx")
+            doc_2.save(
+                'media/documents/original/' + ready_data['train'].name + '_' + container.name + ".docx")
+            return [f'media/documents/draft/' + ready_data['train'].name + '_' + container.name + ".docx",
+                    f'media/documents/original/' + ready_data['train'].name + '_' + container.name + ".docx"]
     except FileExistsError:
         raise FileExistsError
-    return [f'media/documents/draft/' + ready_data['train'].name + '_' + container.name + ".docx",
-            f'media/documents/original/' + ready_data['train'].name + '_' + container.name + ".docx"]
+
 
 
 def convert_excel_data_to_railway_data(train_id, excel_data):
