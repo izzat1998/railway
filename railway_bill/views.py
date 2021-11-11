@@ -47,7 +47,6 @@ class RailwayBillUpdate(UpdateView):
 
     def post(self, request, *args, **kwargs):
         railway_bill_update(request.POST, kwargs['pk'])
-        sleep(1)
         return HttpResponseRedirect(reverse_lazy('railway-bill-update', kwargs={'pk': kwargs['pk']}))
 
 
