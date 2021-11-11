@@ -1,0 +1,49 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block link %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <!-- column -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Basic Table</h4>
+                        <h6 class="card-subtitle">Add class <code>.table</code></h6>
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                {{ form.as_p }}
+                            </div>
+                            <input type="submit" value="submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End PAge Content -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Right sidebar -->
+        <!-- ============================================================== -->
+        <!-- .right-sidebar -->
+        <!-- ============================================================== -->
+        <!-- End Right sidebar -->
+        <!-- ============================================================== -->
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/dataTable.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+{% endblock %}
+s

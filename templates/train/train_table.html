@@ -1,0 +1,80 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block link %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <!-- column -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{% url 'train-create' %}" class="btn btn-primary">Create</a>
+                        </h4>
+                        <div class="table-responsive">
+                            <table class="cell-border" id="myTable">
+                                <thead>
+                                <tr>
+                                    <th class="border-top-0">#</th>
+                                    <th class="border-top-0">Train number</th>
+                                    <th class="border-top-0">Train type</th>
+                                    <th class="border-top-0">Update</th>
+                                    <th class="border-top-0">Upload</th>
+                                    <th class="border-top-0">Zip</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for train in trains %}
+                                    <tr>
+                                        <td>{{ train.id }}</td>
+                                        <td>
+                                            <a href="{% url 'railway-bill-list-by-train' pk=train.id %}">{{ train.name }}</a>
+                                        </td>
+                                        <td>{{ train.type }}</td>
+                                        <td><a href="{% url 'train-update' train.id %}"
+                                               class="btn btn-primary">Update</a>
+                                            <a href="{% url 'train-delete' train.id %}"
+                                               class="btn btn-danger">Delete</a>
+                                        </td>
+                                        <td>
+                                            <a href="{% url  'train-pre-upload-excel' train.id %}">Upload excel</a>
+                                        </td>
+                                        <td>
+                                            {% if train.railway_bills.all.count %}
+                                                <a href="{% url  'railway_download' train.id %}">Download Zipfile</a>
+                                            {% endif %}
+
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End PAge Content -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Right sidebar -->
+        <!-- ============================================================== -->
+        <!-- .right-sidebar -->
+        <!-- ============================================================== -->
+        <!-- End Right sidebar -->
+        <!-- ============================================================== -->
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/dataTable.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+{% endblock %}
