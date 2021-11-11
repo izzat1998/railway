@@ -63,9 +63,9 @@ def create_railway_document(ready_data, container):
         doc_1.render(ready_data)
         doc_2.render(ready_data)
         doc_1.save(
-            '/home/izzat/railway/media/documents/draft/' + ready_data['train'].name + '_' + container.name + ".docx")
+            'media/documents/draft/' + ready_data['train'].name + '_' + container.name + ".docx")
         doc_2.save(
-            '/home/izzat/railway/media/documents/original/' + ready_data['train'].name + '_' + container.name + ".docx")
+            'media/documents/original/' + ready_data['train'].name + '_' + container.name + ".docx")
     except FileExistsError:
         raise FileExistsError
     return [f'media/documents/draft/' + ready_data['train'].name + '_' + container.name + ".docx",
