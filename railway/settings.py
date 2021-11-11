@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'railway.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
+        'NAME': 'izzat',
         'USER': 'postgres',
         'HOST': 'localhost',
         'PASSWORD': '1',
