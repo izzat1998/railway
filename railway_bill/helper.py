@@ -6,6 +6,7 @@ from io import StringIO
 
 from django.http import HttpResponse
 
+from railway.settings import BASE_DIR
 from railway_bill.models import RailwayBill, Container
 from train.models import Train
 from docxtpl import DocxTemplate
@@ -61,8 +62,10 @@ def create_railway_document(ready_data, container):
         ready_data['type'] = container.weight_type_code
         doc_1.render(ready_data)
         doc_2.render(ready_data)
-        doc_1.save('media/documents/draft/' + ready_data['train'].name + '_' + container.name + ".docx")
-        doc_2.save('media/documents/original/' + ready_data['train'].name + '_' + container.name + ".docx")
+        doc_1.save(
+            'home/izzat/railway/media/documents/draft/' + ready_data['train'].name + '_' + container.name + ".docx")
+        doc_2.save(
+            'home/izzat/railway/media/documents/original/' + ready_data['train'].name + '_' + container.name + ".docx")
     except FileExistsError:
         raise FileExistsError
     return [f'media/documents/draft/' + ready_data['train'].name + '_' + container.name + ".docx",
