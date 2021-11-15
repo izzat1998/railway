@@ -38,7 +38,6 @@ class RailwayBill(models.Model):
     railway_carriage = models.TextField(blank=True)
     shipping_name = models.TextField(blank=True)
     container_owner = models.TextField(blank=True)
-    shipping_type = models.CharField(max_length=100, blank=True)
     container = models.ForeignKey(Container, related_name='containers', on_delete=models.CASCADE)
     type_of_packaging = models.CharField(max_length=100)
     number_of_seats = models.IntegerField()

@@ -17,7 +17,7 @@ class RailwayForm(forms.ModelForm):
     class Meta:
         model = RailwayBill
         fields = ['railway_code', 'sender', 'departure_station', 'sender_statement', 'recipient', 'destination_station',
-                  'border_crossing_stations', 'railway_carriage', 'shipping_name', 'container_owner', 'shipping_type',
+                  'border_crossing_stations', 'railway_carriage', 'shipping_name', 'container_owner',
                   'container', 'type_of_packaging', 'number_of_seats', 'net', 'tara', 'gross', 'seals', 'submerged',
                   'method_of_determining_mass', 'payment_of_legal_fees', 'carriers', 'documents_by_sender',
                   'additional_information', 'custom_seal', 'train', 'file'

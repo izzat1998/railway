@@ -25,9 +25,10 @@
                             </div>
 
                         </div>
+                        <div id="result">
+
+                        </div>
                         <div class="table-responsive" id="excel_data">
-                            <table class="table table-striped table-bordered">
-                            </table>
                         </div>
                         <div class="card-footer  ">
 
@@ -75,14 +76,19 @@
                 var sheet_name = work_book.SheetNames;
 
                 var sheet_data = XLSX.utils.sheet_to_json(work_book.Sheets[sheet_name[0]], {header: 1});
-
+                var misses = {}
                 if (sheet_data.length > 0) {
                     var table_output = '<table id="payment_excel_data" class="table table-striped table-bordered">';
                     for (var row = 0; row < sheet_data.length; row++) {
 
                         table_output += '<tr>';
+                        counter = 0
                         for (var cell = 0; cell < sheet_data[row].length; cell++) {
                             {
+                                if (sheet_data[row][cell] === undefined) {
+
+                                }
+
                                 table_output += '<td>' + sheet_data[row][cell] + '</td>';
                             }
 
