@@ -64,7 +64,7 @@ def download_zip(request, train_id):
         railway_files.append('media/' + str(railway.file_original))
         railway_files.append('media/' + str(railway.file))
     response = HttpResponse(content_type='application/zip')
-    zip_file = zipfile.ZipFile(response, 'w')
+    zip_file = zipfile.ZipFile(response, "w")
     for filename in railway_files:
         zip_file.write(filename)
     response['Content-Disposition'] = 'attachment; filename={}'.format(train.name + '.zip')
