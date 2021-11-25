@@ -8,12 +8,6 @@ from train.models import Train
 
 
 class RailwayForm(forms.ModelForm):
-    # train = ChoiceField(
-    #     choices=[(train.id, train.name) for train in Train.objects.all()])
-    # container = ChoiceField(
-    #     choices=[(container.id, container.name) for container in Container.objects.all()])
-    #
-
     class Meta:
         model = RailwayBill
         fields = ['railway_code', 'sender', 'departure_station', 'sender_statement', 'recipient', 'destination_station',
@@ -58,3 +52,4 @@ class RailwayForm(forms.ModelForm):
             queryset=Container.objects.all())
         self.fields['train'] = ModelChoiceField(
             queryset=Train.objects.all())
+

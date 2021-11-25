@@ -1,0 +1,76 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block link %}
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Column -->
+            <div class="row">
+                {% for terminal in terminals %}
+                    <div class="col">
+                        <div class="card text-center">
+                            <div class="card-header">
+                                Terminal
+                            </div>
+                            <div class="card-body">
+                                <a href="{% url 'container-list-in-terminal' pk=terminal.pk %}"><h5
+                                        class="card-title">{{ terminal.name }}</h5></a>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <span> {{ terminal.container_list_in_terminal.all.count }} Containers</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+            <div class="row">
+                <!-- column -->
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title"><a href="{% url 'train-create' %}" class="btn btn-primary">Create</a>
+                            </h4>
+                            <div class="table-responsive">
+                                <table class="row-border stripe compact" id="containers_in_terminal">
+                                    <thead>
+                                    <tr>
+                                        <th class="border-top-0 text-center">#</th>
+                                        <th class="border-top-0 text-center">Terminal</th>
+                                        <th class="border-top-0 text-center">Container</th>
+                                        <th class="border-top-0 text-center">Type</th>
+                                        <th class="border-top-0 text-center">Waiting List</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for container in containers_in_terminal %}
+                                        <tr>
+                                            <td class="text-center">{{ forloop.counter }}</td>
+                                            <td class="text-center">{{ container.terminal.name }}</td>
+                                            <td class="text-center">{{ container.container.name }}</td>
+                                            <td class="text-center">{{ container.container.weight_type }}</td>
+                                            <td class="text-center"><a href="{% url 'container-in-terminal-delete' pk=container.id %}">
+                                                <i class="mdi mdi-24px mdi-delete-forever"
+                                                   aria-hidden="true"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            $('#containers_in_terminal').DataTable();
+        });
+    </script>
+{% endblock %}

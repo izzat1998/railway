@@ -1,7 +1,9 @@
 {% extends '_base.html' %}
 {% load static %}
 {% block link %}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/crud.css' %}">
+     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 {% endblock %}
 {% block content %}
     <div class="container-fluid">
@@ -15,20 +17,18 @@
                     <div class="card-body">
                         <h4 class="card-title"><a href="{% url 'railway-bill-create' %}"
                                                   class="btn btn-primary">Create</a>
-                            {#                            <a href="{% url 'print-printer' %}"#}
-                            {#                                                                                        class="btn btn-success"#}
-                            {#                                                                                        id="for_print">Print</a>#}
                         </h4>
                         <h6 class="card-subtitle">Add class <code>.table</code></h6>
-                        <div class="table-striped">
-                            <table id="myTable">
+                        <div >
+                            <table id="myTable" class="row-border stripe compact">
                                 <thead>
                                 <tr>
-                                    <th class="border-top-0">Train</th>
-                                    <th class="border-top-0">Container number</th>
-                                    <th class="border-top-0">Railway original</th>
-                                    <th class="border-top-0">Railway draft</th>
-                                    <th class="border-top-0">Update</th>
+                                    <th class="border-top-0 text-center">№</th>
+                                    <th class="border-top-0 text-center">Train</th>
+                                    <th class="border-top-0 text-center">Container number</th>
+                                    <th class="border-top-0 text-center">SMGS for print</th>
+                                    <th class="border-top-0 text-center">SMGS for draft</th>
+                                    <th class="border-top-0 text-center">Update</th>
 
                                 </tr>
                                 </thead>
@@ -36,15 +36,26 @@
 
                                 {% for bill in railway_bills %}
                                     <tr>
-                                        <td><a href="{% url 'train-list' %}"> {{ bill.train.name }}</a></td>
-                                        <td>{{ bill.container.name }}</td>
-                                        <td><a href="{{ bill.file_original.url }}"
-                                               download>Railway original</a></td>
-                                        <td><a href="{{ bill.file.url }}" download>Railway draft</a></td>
-                                        <td><a href="{% url 'railway-bill-update' bill.id %}"
-                                               class="btn btn-primary">Update</a>
-                                            <a href="{% url 'railway-bill-delete' bill.id bill.train.id %}"
-                                               class="btn btn-danger">Delete</a>
+                                        <td class="text-center">{{ forloop.counter }}</td>
+                                        <td class="text-center"><a
+                                                href="{% url 'train-list' %}"> {{ bill.train.name }}</a></td>
+                                        <td class="text-center">{{ bill.container.name }}</td>
+                                        <td class="text-center"><a href="{{ bill.file_original.url }}"
+                                                                   download><i
+                                                class="mdi mdi-24px mdi-file-word"></i></a></td>
+                                        <td class="text-center"><a href="{{ bill.file.url }}" download>
+                                            <i class="mdi mdi-24px mdi-file-word"></i>
+                                        </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{% url 'railway-bill-update' bill.id %}">
+                                                <i class="mdi mdi-24px mdi-lead-pencil " aria-hidden="true"></i>
+                                            </a>
+                                            <span>|</span>
+                                            <span>|</span>
+                                            <a href="{% url 'railway-bill-delete' bill.id bill.train.id %}">
+                                                <i class="mdi mdi-24px mdi-delete-forever" aria-hidden="true"></i>
+                                            </a>
                                         </td>
 
 

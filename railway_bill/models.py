@@ -71,3 +71,6 @@ def post_save_image(sender, instance, *args, **kwargs):
         instance.file_original.delete(save=False)
     except:
         pass
+
+
+

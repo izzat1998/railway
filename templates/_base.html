@@ -18,6 +18,41 @@
     />
     <meta name="robots" content="noindex,nofollow"/>
 
+    <style>
+        .bs-canvas-overlay {
+            opacity: 0;
+            z-index: -1;
+        }
+
+        .bs-canvas-overlay.show {
+            opacity: 0.85;
+            z-index: 1100;
+        }
+
+        .bs-canvas {
+            top: 0;
+            width: 0;
+            z-index: 1110;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .bs-canvas-left {
+            left: 0;
+        }
+
+        .bs-canvas-right {
+            right: 0;
+        }
+
+        .bs-canvas-anim {
+            transition: all .2s ease-out;
+            -webkit-transition: all .2s ease-out;
+            -moz-transition: all .2s ease-out;
+            -ms-transition: all .2s ease-out;
+        }
+    </style>
+
     <!-- Favicon icon -->
     <link
             rel="icon"
@@ -27,21 +62,13 @@
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- chartist CSS -->
-    <link
-            href="{% static 'assets/plugins/chartist-js/dist/chartist.min.css' %}"
-            rel="stylesheet"
-    />
-    <link
-            href="{% static 'assets/plugins/chartist-js/dist/chartist-init.css' %}"
-            rel="stylesheet"
-    />
     <link href="{% static 'assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css' %}"
           rel="stylesheet"/>
     <!--This page css - Morris CSS -->
     <link href="{% static 'assets/plugins/c3-master/c3.min.css' %}" rel="stylesheet"/>
     <!-- Custom CSS -->
     <link href="{% static 'css/style.min.css' %} " rel="stylesheet"/>
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     {% block link %}
     {% endblock %}
 </head>
@@ -73,15 +100,13 @@
     <!-- ============================================================== -->
     <header class="topbar" data-navbarbg="skin6">
         <nav class="navbar top-navbar navbar-expand-md navbar-dark">
-            <div class="navbar-header" data-logobg="skin6">
+            <div class="navbar-header" data-logobg="skin1">
                 <!-- ============================================================== -->
                 <!-- Logo -->
                 <!-- ============================================================== -->
                 <a class="navbar-brand ms-4" href="index.html">
-                    <span class="logo-text" style="font-size:25px">
-                <!-- dark Logo text -->
-                       InterRail
-              </span>
+                    <h2>InterRail</h2>
+
                 </a>
                 <!-- ============================================================== -->
                 <!-- End Logo -->
@@ -89,58 +114,32 @@
                 <!-- ============================================================== -->
                 <!-- toggle and nav items -->
                 <!-- ============================================================== -->
-                <a
-                        class="
-                nav-toggler
-                waves-effect waves-light
-                text-white
-                d-block d-md-none
-              "
-                        href="javascript:void(0)"
-                ><i class="ti-menu ti-close"></i
-                ></a>
+                <a class="nav-toggler waves-effect waves-light text-white d-block d-md-none"
+                   href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
             </div>
             <!-- ============================================================== -->
             <!-- End Logo -->
             <!-- ============================================================== -->
-            <div
-                    class="navbar-collapse collapse"
-                    id="navbarSupportedContent"
-                    data-navbarbg="skin5"
-            >
-                <ul class="navbar-nav d-lg-none d-md-block">
+            <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+                <ul class="navbar-nav d-lg-none d-md-block ">
                     <li class="nav-item">
-                        <a
-                                class="
-                    nav-toggler nav-link
-                    waves-effect waves-light
-                    text-white
-                  "
-                                href="javascript:void(0)"
-                        ><i class="ti-menu ti-close"></i
-                        ></a>
+                        <a class="nav-toggler nav-link waves-effect waves-light text-white "
+                           href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
                     </li>
                 </ul>
                 <!-- ============================================================== -->
                 <!-- toggle and nav items -->
                 <!-- ============================================================== -->
-                <ul class="navbar-nav me-auto mt-md-0">
+                <ul class="navbar-nav me-auto mt-md-0 ">
                     <!-- ============================================================== -->
                     <!-- Search -->
                     <!-- ============================================================== -->
 
                     <li class="nav-item search-box">
-                        <a class="nav-link text-muted" href="javascript:void(0)"
-                        ><i class="mdi mdi-magnify fs-3"></i
-                        ></a>
-                        <form class="app-search" style="display: none">
-                            <input
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="Search &amp; enter"
-                            />
-                            <a class="srh-btn"><i class="mdi mdi-close"></i></a>
-                        </form>
+                        <a class="nav-link text-muted" href="javascript:void(0)"><i class="ti-search"></i></a>
+                        <form class="app-search" style="display: none;">
+                            <input type="text" class="form-control" placeholder="Search &amp; enter"> <a
+                                class="srh-btn"><i class="ti-close"></i></a></form>
                     </li>
                 </ul>
 
@@ -151,9 +150,21 @@
                     <!-- ============================================================== -->
                     <!-- User profile and search -->
                     <!-- ============================================================== -->
-                    <li class="nav-item dropdown">
+                    <li class="nav-item " style="margin-right:20px">
+                        <a href="{% url 'train-calendar' %}" class="btn btn-primary"
+                           aria-expanded="false" aria-controls="bs-canvas-right">&#9776 Train Calendar
+                        </a>
 
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown"></ul>
+
+                    </li>
+
+                    <li class="nav-item ">
+                        <button class="btn btn-success" type="button" data-toggle="canvas"
+                                data-target="#bs-canvas-right"
+                                aria-expanded="false" aria-controls="bs-canvas-right">&#9776 Container waiting list
+                        </button>
+
+
                     </li>
                 </ul>
             </div>
@@ -175,6 +186,15 @@
                     <li class="sidebar-item">
                         <a
                                 class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="{% url 'terminal-list' %}"
+                                aria-expanded="false">
+                            <i class="mdi me-2 mdi-gauge"></i
+                            ><span class="hide-menu">Terminals</span></a
+                        >
+                    </li>
+                    <li class="sidebar-item">
+                        <a
+                                class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="{% url 'train-list' %}"
                                 aria-expanded="false"
                         >
@@ -190,10 +210,20 @@
                                 aria-expanded="false"
                         >
                             <i class="mdi me-2 mdi-file"></i
-                            ><span class="hide-menu">Railway bills</span></a
+                            ><span class="hide-menu">SMGS</span></a
                         >
                     </li>
 
+                    <li class="sidebar-item">
+                        <a
+                                class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="{% url 'container-status-list' %}"
+                                aria-expanded="false"
+                        >
+                            <i class="mdi me-2 mdi-file"></i
+                            ><span class="hide-menu">Containers status</span></a
+                        >
+                    </li>
 
                 </ul>
             </nav>
@@ -244,7 +274,50 @@
     <!-- ============================================================== -->
     <!-- Page wrapper  -->
     <!-- ============================================================== -->
+    <!-- Pushable content along with off-canvas opener. -->
+
     <div class="page-wrapper">
+
+
+        <div id="bs-canvas-right" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100">
+            <header class="bs-canvas-header p-3  overflow-auto">
+                <button type="button" class="btn-close bs-canvas-close float-right" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </header>
+            <div class="bs-canvas-content px-3 py-5">
+                <table id="waiting_container_list" class="cell-border stripe compact">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Container</th>
+                        <th>Type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for waiting_container in  waiting_containers %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ waiting_container.container.name }}</td>
+                            <td>{{ waiting_container.container.weight_type }}</td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <footer>
+                <form action="{% url 'upload-waiting-list-excel' %}"
+                      method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="exampleFormControlFile1">For planned containers (Excel)</label>
+                        <input type="file" name="waiting_list_excel" class="form-control"
+                               id="exampleFormControlFile1">
+                    </div>
+                    <input type="submit" value="Upload" class="btn btn-success">
+                </form>
+            </footer>
+        </div>
         {% block content %}
 
 
@@ -262,6 +335,7 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
+
 <script src="{% static 'assets/plugins/jquery/dist/jquery.min.js' %}"></script>
 <!-- Bootstrap tether Core JavaScript -->
 <script src="{% static 'assets/plugins/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
@@ -282,6 +356,66 @@
 <!--Custom JavaScript -->
 <script src="{% static 'js/pages/dashboards/dashboard1.js' %}"></script>
 <script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/dataTable.js' %}"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        var bsDefaults = {
+                offset: false,
+                overlay: true,
+                width: '330px'
+            },
+            bsMain = $('.bs-offset-main'),
+            bsOverlay = $('.bs-canvas-overlay');
+
+        $('[data-toggle="canvas"][aria-expanded="false"]').on('click', function () {
+            var canvas = $(this).data('target'),
+                opts = $.extend({}, bsDefaults, $(canvas).data()),
+                prop = $(canvas).hasClass('bs-canvas-right') ? 'margin-right' : 'margin-left';
+
+            if (opts.width === '100%')
+                opts.offset = false;
+            $(canvas).css('width', opts.width);
+            if (opts.offset && bsMain.length)
+                bsMain.css(prop, opts.width);
+
+            $(canvas + ' .bs-canvas-close').attr('aria-expanded', "true");
+            $('[data-toggle="canvas"][data-target="' + canvas + '"]').attr('aria-expanded', "true");
+            if (opts.overlay && bsOverlay.length)
+                bsOverlay.addClass('show');
+            return false;
+        });
+
+        $('.bs-canvas-close, .bs-canvas-overlay').on('click', function () {
+            var canvas, aria;
+            if ($(this).hasClass('bs-canvas-close')) {
+                canvas = $(this).closest('.bs-canvas');
+                aria = $(this).add($('[data-toggle="canvas"][data-target="#' + canvas.attr('id') + '"]'));
+                if (bsMain.length)
+                    bsMain.css(($(canvas).hasClass('bs-canvas-right') ? 'margin-right' : 'margin-left'), '');
+            } else {
+                canvas = $('.bs-canvas');
+                aria = $('.bs-canvas-close, [data-toggle="canvas"]');
+                if (bsMain.length)
+                    bsMain.css({
+                        'margin-left': '',
+                        'margin-right': ''
+                    });
+            }
+            canvas.css('width', '');
+            aria.attr('aria-expanded', "false");
+            if (bsOverlay.length)
+                bsOverlay.removeClass('show');
+            return false;
+        });
+    });
+    $(document).ready(function () {
+        $('#waiting_container_list').DataTable({
+            "dom": '<"toolbar">ftp'
+        });
+
+    });
+</script>
+
 {% block script %}
 {% endblock %}
 </body>

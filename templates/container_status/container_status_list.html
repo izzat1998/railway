@@ -1,0 +1,256 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block link %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{% static 'css/crud.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <!-- column -->
+            <div class="col-sm-4">
+                <div class="card-header text-center">
+                    <h6>Arrived</h6>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="progress ">
+                            <div class="progress-bar arrived" role="progressbar" style="width: 35%" aria-valuenow="75"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card-header text-center">
+                    <h6>Shipment Documents</h6>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="progress ">
+                            <div class="progress-bar shipment_document" role="progressbar" style="width: 35%"
+                                 aria-valuenow="75"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card-header text-center">
+                    <h6>Seal images</h6>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="progress ">
+                            <div class="progress-bar seal_image" role="progressbar" style="width: 35%"
+                                 aria-valuenow="35"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+
+                <div class="card">
+
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="{% url 'railway-bill-create' %}"
+                                                  class="btn btn-primary">Create</a>
+
+                        </h4>
+                        <h6 class="card-subtitle">Add class <code>.table</code></h6>
+                        <div>
+                            <table id="container_status_table" class="row-border stripe compact">
+                                <thead>
+                                <tr>
+                                    <th class="border-top-0 text-center">Train</th>
+                                    <th class="border-top-0 text-center">№</th>
+                                    <th class="border-top-0 text-center">Container number</th>
+                                    <th class="border-top-0 text-center">Arrived</th>
+                                    <th class="border-top-0 text-center">Shipment documents</th>
+                                    <th class="border-top-0 text-center">Plombs image</th>
+                                    <th class="border-top-0 text-center">Update</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for container_status in container_status_list %}
+                                    <tr>
+                                        <td class="text-center">{{ forloop.counter }}</td>
+                                        <td class="text-center"><a
+                                                href="{% url 'train-list' %}"> {{ container_status.train.name }}</a>
+                                        </td>
+                                        <td class="text-center">{{ container_status.cargo_container.name }}</td>
+                                        <td class="text-center">
+                                            {% if container_status.arrived %}
+                                                <input class="form-check-input" name="arrived_status" type="checkbox"
+                                                       id="inlineCheckbox1" checked disabled>
+                                            {% else %}
+                                                <input class="form-check-input" name="arrived_status" type="checkbox"
+                                                       id="inlineCheckbox1"
+                                                       disabled>
+                                            {% endif %}
+
+
+                                        </td>
+                                        <td class="text-center">
+                                            {% if container_status.container_documents.first %}
+                                                {% for container_document in container_status.container_documents.all %}
+                                                    <a href="{{ container_document.document.url }}">
+                                                        <i class="mdi mdi-24px mdi-file-pdf"></i>
+                                                    </a>
+                                                {% endfor %}
+
+
+                                            {% else %}
+
+                                            {% endif %}
+
+
+                                        </td>
+                                        <td class="text-center">
+                                            {% for seal_image in container_status.seal_images.all %}
+                                                <img src="{{ seal_image.image.url }}"
+                                                     onclick="open_modal('{{ seal_image.image.url }}')" width="25px">
+                                                </img>
+                                            {% endfor %}
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#"><i class="mdi mdi-24px mdi-lead-pencil" aria-hidden="true"></i></a>
+                                            <span>|</span>
+                                            <span>|</span>
+                                            <a href="#"><i class="mdi mdi-24px mdi-delete-forever"
+                                                           aria-hidden="true"></i></a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer  ">
+
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                {% if  container_status_list.count != 0 %}
+                                    <form action="{% url 'upload-container-documents' train_id=container_status_list.first.train_id %}"
+                                          method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="exampleFormControlFile1">For documents</label>
+                                            <input type="file" name="container_files" class="form-control" multiple
+                                                   id="exampleFormControlFile1">
+                                        </div>
+                                        <input type="submit" value="Upload" class="btn btn-success">
+                                    </form>
+                                {% endif %}
+
+                            </div>
+                            <div class="col-lg-6">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+                class="modal fade"
+                id="plomb_images"
+                tabindex="-1"
+                aria-labelledby="bs-example-modal-lg"
+                aria-hidden="true"
+        >
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myLargeModalLabel">
+                            Checking Excel
+                        </h4>
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                                onclick="clear_all_data()"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div id="modal_plombs_body">
+                            <div id="carouselExampleCaptions" class="carousel slide carousel-dark"
+                                 data-bs-ride="carousel">
+
+                                <div class="carousel-inner" id="carousel_plomb_images">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+
+    </div>
+
+
+
+{% endblock %}
+{% block script %}
+
+
+    <script>
+        let noDocumentCounter = 0;
+        let ArrivedCounter = 0;
+        let noImageCounter = 0;
+
+        const rowCount = $('#container_status_table > tbody tr').length;
+        $('#container_status_table > tbody  > tr > td:nth-child(5)').each(function () {
+            if (($(this).children("a").attr("href")) === undefined) {
+                noDocumentCounter += 1;
+            }
+        });
+        $('#container_status_table > tbody  > tr > td:nth-child(6)').each(function () {
+            if (($(this).children("img").attr("src")) === undefined) {
+                noImageCounter += 1;
+            }
+        });
+        imageCounter = rowCount - noImageCounter
+        const arrivedStatus = $('input[name="arrived_status"]:checked').length;
+        documentCounter = rowCount - noDocumentCounter
+        $('.arrived').width(((arrivedStatus / rowCount) * 100) + '%')
+        $('.shipment_document').width(((documentCounter / rowCount) * 100) + '%')
+        $('.seal_image').width(((imageCounter / rowCount) * 100) + '%')
+
+
+        function open_modal(url_image) {
+
+            var img_div = '<div class="carousel-item active text-center"><img  src="' + url_image + '" width="70%"> </div>';
+            $("#carousel_plomb_images").append(img_div);
+            $('#plomb_images').modal('show')
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            $(' #container_status_table').DataTable();
+        })
+
+    </script>
+{% endblock %}

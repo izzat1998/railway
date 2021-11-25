@@ -2,6 +2,7 @@
 {% load static %}
 {% block link %}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{% static 'css/crud.css' %}">
 {% endblock %}
 {% block content %}
     <div class="container-fluid">
@@ -16,38 +17,52 @@
                         <h4 class="card-title"><a href="{% url 'train-create' %}" class="btn btn-primary">Create</a>
                         </h4>
                         <div class="table-responsive">
-                            <table class="cell-border" id="myTable">
+                            <table class="row-border stripe compact" id="myTable">
                                 <thead>
                                 <tr>
-                                    <th class="border-top-0">#</th>
-                                    <th class="border-top-0">Train number</th>
-                                    <th class="border-top-0">Train type</th>
-                                    <th class="border-top-0">Update</th>
-                                    <th class="border-top-0">Upload</th>
-                                    <th class="border-top-0">Zip</th>
+                                    <th class="border-top-0 text-center">#</th>
+                                    <th class="border-top-0 text-center">Train number</th>
+                                    <th class="border-top-0 text-center">Train type</th>
+                                    <th class="border-top-0 text-center">Containers</th>
+                                    <th class="border-top-0 text-center">SMGS</th>
+                                    <th class="border-top-0 text-center" colspan="2">Upload</th>
+                                    <th class="border-top-0 text-center">Zip</th>
+                                    <th class="border-top-0 text-center">Update</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for train in trains %}
                                     <tr>
-                                        <td>{{ train.id }}</td>
-                                        <td>
-                                            <a href="{% url 'railway-bill-list-by-train' pk=train.id %}">{{ train.name }}</a>
+                                        <td class="text-center">{{ train.id }}</td>
+                                        <td class="text-center">
+                                            {{ train.name }}
                                         </td>
-                                        <td>{{ train.type }}</td>
-                                        <td><a href="{% url 'train-update' train.id %}"
-                                               class="btn btn-primary">Update</a>
-                                            <a href="{% url 'train-delete' train.id %}"
-                                               class="btn btn-danger">Delete</a>
+                                        <td class="text-center">{{ train.type }}</td>
+                                        <td class="text-center">
+                                            <a href="{% url 'container-status-list-by-train' pk=train.id %}">CONTAINERS</a>
                                         </td>
-                                        <td>
-                                            <a href="{% url  'train-pre-upload-excel' train.id %}">Upload excel</a>
+                                        <td class="text-center"><a
+                                                href="{% url 'railway-bill-list-by-train' pk=train.id %}">SMGS</a></td>
+
+                                        <td class="text-center">
+                                            <a href="{% url  'container-status-pre-upload-excel' train.id %}">Containers</a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{% url  'train-pre-upload-excel' train.id %}">SMGS</a>
                                         </td>
                                         <td>
                                             {% if train.railway_bills.all.count %}
                                                 <a href="{% url  'railway_download' train.id %}">Download Zipfile</a>
                                             {% endif %}
 
+                                        </td>
+                                        <td class="text-center"><a href="{% url 'train-update' train.id %}">
+                                            <i class="mdi mdi-24px mdi-lead-pencil" aria-hidden="true"></i></a>
+                                            <span>|</span>
+                                            <span>|</span>
+                                            <a href="{% url 'train-delete' train.id %}"
+                                            ><i class="mdi mdi-24px mdi-delete-forever"
+                                                aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

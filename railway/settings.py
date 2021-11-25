@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from train.apps import TrainConfig
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -36,8 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'terminal.apps.DashboardConfig',
     'train.apps.TrainConfig',
     'railway_bill.apps.RailwayBillConfig',
+    'container_status.apps.ContainerStatusConfig',
+
+
 ]
 
 MIDDLEWARE = [
@@ -64,6 +70,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # custom context_processors
+                'train.context_processors.access_terminals',
+                'container_status.context_processor.access_container_status_list',
             ],
         },
     },
