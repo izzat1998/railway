@@ -38,10 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+
     'train.apps.TrainConfig',
     'railway_bill.apps.RailwayBillConfig',
     'container_status.apps.ContainerStatusConfig',
     'terminal.apps.TerminalConfig',
+    'staff.apps.StaffConfig',
+    'api.apps.ApiConfig',
 
 ]
 

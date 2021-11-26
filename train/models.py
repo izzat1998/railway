@@ -19,6 +19,3 @@ class Train(models.Model):
 
     def get_absolute_url(self):  # new
         return reverse('train-update', args=[str(self.id)])
-
-
-

@@ -41,6 +41,8 @@
                                         <th class="border-top-0 text-center">Terminal</th>
                                         <th class="border-top-0 text-center">Container</th>
                                         <th class="border-top-0 text-center">Type</th>
+                                        <th class="border-top-0 text-center">Manager</th>
+                                        <th class="border-top-0 text-center">Date</th>
                                         <th class="border-top-0 text-center">Waiting List</th>
                                     </tr>
                                     </thead>
@@ -51,7 +53,10 @@
                                             <td class="text-center">{{ container.terminal.name }}</td>
                                             <td class="text-center">{{ container.container.name }}</td>
                                             <td class="text-center">{{ container.container.weight_type }}</td>
-                                            <td class="text-center"><a href="{% url 'container-in-terminal-delete' pk=container.id %}">
+                                            <td class="text-center">{{ container.staff.user.username }}</td>
+                                            <td class="text-center">{{ container.date_of_arrived }}</td>
+                                            <td class="text-center"><a
+                                                    href="{% url 'container-in-terminal-delete' pk=container.id %}">
                                                 <i class="mdi mdi-24px mdi-delete-forever"
                                                    aria-hidden="true"></i></a></td>
                                         </tr>

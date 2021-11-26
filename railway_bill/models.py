@@ -21,7 +21,7 @@ class Container(models.Model):
     )
     name = models.CharField(max_length=100)
     weight_type = models.CharField(max_length=20, choices=weight_type_choices)
-    weight_type_code = models.CharField(max_length=20, choices=weight_type_code_choices)
+    weight_type_code = models.CharField(max_length=20, choices=weight_type_code_choices, null=True)
 
     def __str__(self):
         return self.name
@@ -71,6 +71,3 @@ def post_save_image(sender, instance, *args, **kwargs):
         instance.file_original.delete(save=False)
     except:
         pass
-
-
-

@@ -34,7 +34,7 @@ class ContainerStatus(models.Model):
 
 class WaitingList(models.Model):
     container = models.OneToOneField('railway_bill.Container', related_name='container_in_waiting_list',
-                                  on_delete=models.CASCADE, null=True)
+                                     on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.container.name
