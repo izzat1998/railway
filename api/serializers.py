@@ -31,7 +31,7 @@ class ContainerInTerminalSerializerCreate(serializers.Serializer):
         terminal_name = validated_data.pop('terminal_name')
         date_of_arrived = validated_data.pop('date_of_arrived')
         staff = Staff.objects.filter(telegram_id=telegram_id)
-        container, _ = Container.objects.get_or_create(name=container_name, container_type=container_type)
+        container, _ = Container.objects.get_or_create(name=container_name, weight_type=container_type)
         if WaitingList.objects.filter(container=container).exists():
             waiting_list_container = WaitingList.objects.get(container=container)
             waiting_list_container.delete()
