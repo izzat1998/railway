@@ -37,4 +37,5 @@ def read_excel_create_waiting_list(excel_data):
     ready_data = {}
     for index, row in df.iterrows():
         container, _ = Container.objects.get_or_create(name=row['CONTAINER'], weight_type=row['TYPE'])
+        print(container)
         WaitingList.objects.get_or_create(container=container)

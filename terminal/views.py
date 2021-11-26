@@ -47,4 +47,4 @@ class ContainerInTerminalDelete(DeleteView):
 @receiver(models.signals.post_delete, sender=ContainerInTerminal)
 def delete_file(sender, instance, *args, **kwargs):
     """ Deletes image files on `post_delete` """
-    WaitingList.objects.create(container_id=instance.container.id)
+    WaitingList.objects.get_or_create(container_id=instance.container.id)
