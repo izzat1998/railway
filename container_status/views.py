@@ -30,6 +30,7 @@ def upload_container_documents(request, train_id):
     return HttpResponseRedirect(reverse_lazy('container-status-list-by-train', kwargs={'pk': train_id}))
 
 
-def upload_waiting_excel_upload(request):
+def upload_waiting_excel(request):
     read_excel_create_waiting_list(request.FILES.get('waiting_list_excel'))
     return HttpResponseRedirect(reverse_lazy('terminal-list'))
+

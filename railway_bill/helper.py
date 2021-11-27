@@ -7,8 +7,10 @@ from io import StringIO
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 
+from container_status.models import ContainerStatus, WaitingList
 from railway.settings import BASE_DIR
 from railway_bill.models import RailwayBill, Container
+from terminal.models import ContainerInTerminal
 from train.models import Train
 from docxtpl import DocxTemplate
 
@@ -133,7 +135,10 @@ def convert_excel_data_to_railway_data(train_id, excel_data):
         file_original = open(pre_files[1])
         ready_data['file'] = file_draft.name.replace('media/', '')
         ready_data['file_original'] = file_original.name.replace('media/', '')
+        if ContainerInTerminal.objects.filter(container=container).exists():
+            ContainerStatus.objects.create(train_id=train_id, cargo_container=container, arrived=True)
 
+        else:
+            WaitingList.objects.get_or_create(container=container)
+            ContainerStatus.objects.get_or_create(train_id=train_id, cargo_container=container, arrived=False)
         RailwayBill.objects.create(**ready_data)
-
-

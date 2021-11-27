@@ -21,11 +21,11 @@
                                 <thead>
                                 <tr>
                                     <th class="border-top-0 text-center">#</th>
+                                    <th class="border-top-0 text-center">Terminal</th>
                                     <th class="border-top-0 text-center">Train number</th>
                                     <th class="border-top-0 text-center">Train type</th>
-                                    <th class="border-top-0 text-center">Containers</th>
-                                    <th class="border-top-0 text-center">SMGS</th>
-                                    <th class="border-top-0 text-center" colspan="2">Upload</th>
+                                    <th class="border-top-0 text-center">SMGS forms</th>
+                                    <th class="border-top-0 text-center">Upload</th>
                                     <th class="border-top-0 text-center">Zip</th>
                                     <th class="border-top-0 text-center">Update</th>
                                 </tr>
@@ -33,26 +33,26 @@
                                 <tbody>
                                 {% for train in trains %}
                                     <tr>
-                                        <td class="text-center">{{ train.id }}</td>
+
+                                        <td class="text-center">{{ forloop.counter }}</td>
                                         <td class="text-center">
-                                            {{ train.name }}
+                                            {{ train.terminal.name }}
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{% url 'container-status-list-by-train' pk=train.id %}">{{ train.name }}</a>
                                         </td>
                                         <td class="text-center">{{ train.type }}</td>
-                                        <td class="text-center">
-                                            <a href="{% url 'container-status-list-by-train' pk=train.id %}">CONTAINERS</a>
-                                        </td>
                                         <td class="text-center"><a
-                                                href="{% url 'railway-bill-list-by-train' pk=train.id %}">SMGS</a></td>
+                                                href="{% url 'railway-bill-list-by-train' pk=train.id %}">SMGS forms</a></td>
+
+                                        <td class="text-center"><a
+                                                href="{% url 'train-pre-upload-excel' pk=train.id %}">SMGS</a></td>
 
                                         <td class="text-center">
-                                            <a href="{% url  'container-status-pre-upload-excel' train.id %}">Containers</a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a href="{% url  'train-pre-upload-excel' train.id %}">SMGS</a>
-                                        </td>
-                                        <td>
                                             {% if train.railway_bills.all.count %}
-                                                <a href="{% url  'railway_download' train.id %}">Download Zipfile</a>
+                                                <a href="{% url  'railway_download' train.id %}"><i
+                                                        class="mdi mdi-24px mdi-download"
+                                                        aria-hidden="true"></i> Download </a>
                                             {% endif %}
 
                                         </td>

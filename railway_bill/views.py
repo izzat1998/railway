@@ -69,3 +69,6 @@ def download_zip(request, train_id):
         zip_file.write(filename)
     response['Content-Disposition'] = 'attachment; filename={}'.format(train.name + '.zip')
     return response
+
+
+

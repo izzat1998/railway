@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from container_status.models import WaitingList
+from container_status.models import WaitingList, ContainerStatus
 from railway_bill.models import Container
 from staff.models import Staff
 from terminal.models import ContainerInTerminal, Terminal
@@ -34,10 +34,11 @@ class ContainerInTerminalSerializerCreate(serializers.Serializer):
         container, _ = Container.objects.get_or_create(name=container_name, weight_type=container_type)
         if WaitingList.objects.filter(container=container).exists():
             WaitingList.objects.get(container=container).delete()
+        container_status = ContainerStatus.objects.filter(cargo_container=container).update(arrived=True)
 
         terminal = Terminal.objects.get(name=terminal_name)
-        container_in_terminal = ContainerInTerminal.objects.create(container=container, terminal=terminal,
-                                                                   staff=staff[0],
-                                                                   date_of_arrived=date_of_arrived)
+        container_in_terminal = ContainerInTerminal.objects.get_or_create(container=container, terminal=terminal,
+                                                                          staff=staff[0],
+                                                                          date_of_arrived=date_of_arrived)
 
         return container_in_terminal

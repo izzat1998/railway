@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+
+
 from staff.models import Staff
 
 
@@ -20,3 +22,5 @@ class ContainerInTerminal(models.Model):
 
     def __str__(self):
         return self.container.name
+
+
