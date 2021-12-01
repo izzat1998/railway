@@ -11,6 +11,7 @@ class ContainerInTerminalSerializerCreate(serializers.Serializer):
     container_name = serializers.CharField(max_length=200)
     container_type = serializers.CharField(max_length=200)
     terminal_name = serializers.CharField(max_length=10)
+    laden = serializers.BooleanField()
     date_of_arrived = serializers.DateField()
 
     def validate(self, data):
