@@ -4,8 +4,12 @@ from django.contrib import admin
 
 from .models import Container, RailwayBill
 
-admin.site.register(Container)
-admin.site.register(RailwayBill)
 
+class ContainerAdmin(admin.ModelAdmin):
+    search_fields = ['name']
+
+
+admin.site.register(Container, ContainerAdmin)
+admin.site.register(RailwayBill)
 
 # Register your models here.
