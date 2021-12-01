@@ -20,6 +20,7 @@ class Container(models.Model):
         ('L5G1', 'L5G1'),
     )
     name = models.CharField(max_length=13, unique=True)
+
     weight_type = models.CharField(max_length=20, choices=weight_type_choices)
     weight_type_code = models.CharField(max_length=20, choices=weight_type_code_choices, null=True)
 
