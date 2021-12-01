@@ -1,7 +1,7 @@
 from django.urls import path
 
 from railway_bill.views import RailwayBillList, RailwayBillCreate, RailwayBillUpdate, \
-    RailwayBillListbyTrain, RailwayBillDelete, download_zip
+    RailwayBillListbyTrain, RailwayBillDelete, download_zip, SMGSUpload
 
 urlpatterns = [
     path('', RailwayBillList.as_view(), name='railway-bill-list'),
@@ -14,4 +14,6 @@ urlpatterns = [
 
     path('download_zip_file/<int:train_id>/', download_zip, name='railway_download'),
 
+    path('train_pre_upload/<int:pk>/', SMGSUpload.as_view(), name='train-pre-upload-excel'),
+    path('train_pre_upload/', SMGSUpload.as_view(), name='train-upload-excel'),
 ]

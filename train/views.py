@@ -1,12 +1,7 @@
-from pyexpat import model
-
-from django.shortcuts import render, redirect
-
 from django.urls import reverse_lazy
-from django.views import View
+
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 
-from railway_bill.helper import convert_excel_data_to_railway_data
 from train.forms import TrainForm
 
 from train.models import Train
@@ -38,28 +33,10 @@ class TrainDelete(DeleteView):
     success_url = reverse_lazy('train-list')
 
 
-class SMGSUpload(View):
-    def get(self, request, pk):
-        return render(request, 'railway_bill/smgs_pre_upload.html', context={'pk': pk})
-
-    def post(self, request):
-        train_id = request.POST.get('train_id')
-        excel_file = request.FILES['excel']
-
-        convert_excel_data_to_railway_data(train_id, excel_file)
-        return redirect(reverse_lazy('railway-bill-list-by-train', kwargs={'pk': train_id}))
 
 
-class ContainerStatusUpload(View):
-    def get(self, request, pk):
-        return render(request, 'container_status/container_status_upload.html', context={'pk': pk})
 
-    def post(self, request):
-        train_id = request.POST.get('train_id')
-        excel_file = request.FILES['excel']
 
-        convert_excel_data_to_railway_data(train_id, excel_file)
-        return redirect(reverse_lazy('railway-bill-list-by-train', kwargs={'pk': train_id}))
 
 
 class TrainsByTerminal(ListView):

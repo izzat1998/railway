@@ -123,7 +123,8 @@
                                             {% endfor %}
                                         </td>
                                         <td class="text-center">
-                                            <a href="#"><i class="mdi mdi-24px mdi-lead-pencil" aria-hidden="true"></i></a>
+                                            <a href="{% url 'container-status-update' pk=container_status.id %}"><i
+                                                    class="mdi mdi-24px mdi-lead-pencil" aria-hidden="true"></i></a>
                                             <span>|</span>
                                             <span>|</span>
                                             <a href="#"><i class="mdi mdi-24px mdi-delete-forever"

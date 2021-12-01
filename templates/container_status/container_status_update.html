@@ -1,0 +1,131 @@
+{% extends '_base.html' %}
+
+{% block content %}
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
+
+        <form action="{% url 'container-status-update' pk=container_status.id %}" method="post"
+              enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- column -->
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>{{ container_status }}</h4>
+                            <h5>Container Data</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" for="inlineCheckbox1">Arrived</label>
+                                    <input class="form-check-input" name="arrived" type="checkbox" id="inlineCheckbox1"
+                                            {% if arrived %} checked {% endif %}
+                                    >
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="train">Train</label>
+                                <select class="form-control"  name="train">
+                                    {% for train in trains %}
+                                        <option name="train" value="{{ train.id }}" {% if train.id == current_train.id %}
+                                                selected{% endif %}>{{ train.name }}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Documents</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group" id="documents_form">
+                                <div class="custom-file">
+                                    <input type="text" name="deleted_files_id" hidden id="deleted_files_id" value="">
+                                    {% for document in documents %}
+                                        <div id="document{{ document.id }}">
+
+
+                                            <a href="{{ document.document.url }}"> {{ document.document.name }}</a></label>
+                                            <i class="mdi mdi-24px mdi-delete-forever"
+                                               onclick='delete_file("{{ document.id }}")'></i>
+                                        </div>
+
+                                    {% endfor %}
+                                    <input type="file" class="form-control" name="new_files" id="customFile" multiple>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Seal Images</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group" id="documents_form">
+                                <div class="custom-file row">
+                                    <input type="text" hidden name="deleted_images_id" id="deleted_images_id" value="">
+                                    {% for image in seal_images %}
+                                        <div id="image{{ image.id }}" class="col">
+
+                                            <img src="{{ image.image.url }}" width="100px" alt="">
+                                            <i class="mdi mdi-24px mdi-delete-forever"
+                                               onclick='delete_image("{{ image.id }}")'></i>
+                                        </div>
+
+                                    {% endfor %}
+                                    <input type="file" class="form-control" name="new_seal_images" multiple>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <input type="submit" value="Save" class="btn btn-success">
+        </form>
+
+    </div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Right sidebar -->
+    <!-- ============================================================== -->
+    <!-- .right-sidebar -->
+    <!-- ============================================================== -->
+    <!-- End Right sidebar -->
+    <!-- ============================================================== -->
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+
+        function delete_file(id) {
+            id = 'document' + id.toString()
+            delete_document = document.getElementById(id)
+            delete_document.remove()
+            document.getElementById('deleted_files_id').value += id;
+
+        }
+
+        function delete_image(id) {
+            id = 'image' + id.toString()
+            delete_document = document.getElementById(id)
+            delete_document.remove()
+            document.getElementById('deleted_images_id').value += id;
+
+        }
+    </script>
+{% endblock %}

@@ -75,6 +75,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # custom context_processors
                 'train.context_processors.access_terminals',
+                'train.context_processors.access_trains',
                 'container_status.context_processor.access_container_status_list',
             ],
         },

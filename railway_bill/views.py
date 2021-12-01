@@ -3,10 +3,12 @@ import zipfile
 from pyexpat import model
 
 from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, FormView, DetailView, DeleteView
 
-from railway_bill.helper import railway_bill_update, railway_bill_create
+from railway_bill.helper import railway_bill_update, railway_bill_create, convert_excel_data_to_railway_data
 from railway_bill.forms import RailwayForm
 from railway_bill.models import RailwayBill
 from train.models import Train
@@ -71,4 +73,13 @@ def download_zip(request, train_id):
     return response
 
 
+class SMGSUpload(View):
+    def get(self, request, pk):
+        return render(request, 'railway_bill/smgs_pre_upload.html', context={'pk': pk})
 
+    def post(self, request):
+        train_id = request.POST.get('train_id')
+        excel_file = request.FILES['excel']
+
+        convert_excel_data_to_railway_data(train_id, excel_file)
+        return redirect(reverse_lazy('railway-bill-list-by-train', kwargs={'pk': train_id}))
