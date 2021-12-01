@@ -1,7 +1,11 @@
 from django.db import models
 
 # Create your models here.
+from django.db.models.signals import post_delete, pre_delete
+from django.dispatch import receiver
+
 from railway_bill.models import Container
+from terminal.models import ContainerInTerminal
 from train.models import Train
 
 
@@ -28,7 +32,6 @@ class ContainerStatus(models.Model):
     cargo_container = models.ForeignKey(Container, related_name='container_statuses', on_delete=models.CASCADE)
     arrived = models.BooleanField(default=False)
 
-
     def __str__(self):
         return self.cargo_container.name
 
@@ -39,3 +42,8 @@ class WaitingList(models.Model):
 
     def __str__(self):
         return self.container.name
+
+
+@receiver(pre_delete, sender=ContainerStatus)
+def send_data_terminal(sender, instance, *args, **kwargs):
+    ContainerInTerminal.objects.create(container_id=instance.cargo_container.id)
