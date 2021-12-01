@@ -31,7 +31,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                         <div class="progress" style="height: 20px;">
+                        <div class="progress" style="height: 20px;">
                             <div class="progress-bar shipment_document" role="progressbar" style="width: 35%"
                                  aria-valuenow="75"
                                  aria-valuemin="0"
@@ -46,7 +46,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                         <div class="progress" style="height: 20px;">
+                        <div class="progress" style="height: 20px;">
                             <div class="progress-bar seal_image" role="progressbar" style="width: 35%"
                                  aria-valuenow="35"
                                  aria-valuemin="0"
@@ -72,6 +72,7 @@
                                     <th class="border-top-0 text-center">№</th>
                                     <th class="border-top-0 text-center">Train</th>
                                     <th class="border-top-0 text-center">Container number</th>
+                                    <th class="border-top-0 text-center">Состояние</th>
                                     <th class="border-top-0 text-center">Arrived</th>
                                     <th class="border-top-0 text-center">Shipment documents</th>
                                     <th class="border-top-0 text-center">Plombs image</th>
@@ -88,6 +89,12 @@
                                                 href="{% url 'train-list' %}"> {{ container_status.train.name }}</a>
                                         </td>
                                         <td class="text-center">{{ container_status.cargo_container.name }}</td>
+                                        {% if container_status.laden %}
+                                           <td class="text-center">Груженный</td>
+                                            {% else %}
+                                            <td class="text-center">Порожний</td>
+                                        {% endif %}
+
                                         <td class="text-center">
                                             {% if container_status.arrived %}
                                                 <input class="form-check-input" name="arrived_status" type="checkbox"
@@ -257,7 +264,30 @@
     <script>
         $(document).ready(function () {
 
-            $(' #container_status_table').DataTable();
+            $(' #container_status_table').DataTable({
+                initComplete: function () {
+                    this.api().columns().every(function () {
+                        var column = this;
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo($(column.footer()).empty())
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                }
+
+            });
+
         })
 
     </script>

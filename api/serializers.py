@@ -28,13 +28,14 @@ class ContainerInTerminalSerializerCreate(serializers.Serializer):
         telegram_id = validated_data.pop('telegram_id')
         container_name = validated_data.pop('container_name')
         container_type = validated_data.pop('container_type')
+        laden = validated_data.pop('laden')
         terminal_name = validated_data.pop('terminal_name')
         date_of_arrived = validated_data.pop('date_of_arrived')
         staff = Staff.objects.filter(telegram_id=telegram_id)
         container, _ = Container.objects.get_or_create(name=container_name, weight_type=container_type)
         if WaitingList.objects.filter(container=container).exists():
             WaitingList.objects.get(container=container).delete()
-        ContainerStatus.objects.filter(cargo_container=container).update(arrived=True)
+        ContainerStatus.objects.filter(cargo_container=container).update(arrived=True, laden=laden)
 
         terminal = Terminal.objects.get(name=terminal_name)
         container_in_terminal = ContainerInTerminal.objects.get_or_create(container=container, terminal=terminal,

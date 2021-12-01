@@ -27,6 +27,7 @@ class ContainerStatus(models.Model):
     train = models.ForeignKey(Train, related_name='container_status', on_delete=models.CASCADE)
     cargo_container = models.ForeignKey(Container, related_name='container_statuses', on_delete=models.CASCADE)
     arrived = models.BooleanField(default=False)
+    laden = models.BooleanField(default=False)
 
     def __str__(self):
         return self.cargo_container.name
