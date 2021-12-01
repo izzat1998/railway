@@ -69,8 +69,9 @@
                             <table id="container_status_table" class="row-border stripe compact">
                                 <thead>
                                 <tr>
-                                    <th class="border-top-0 text-center">Train</th>
+
                                     <th class="border-top-0 text-center">№</th>
+                                    <th class="border-top-0 text-center">Train</th>
                                     <th class="border-top-0 text-center">Container number</th>
                                     <th class="border-top-0 text-center">Arrived</th>
                                     <th class="border-top-0 text-center">Shipment documents</th>
@@ -127,8 +128,9 @@
                                                     class="mdi mdi-24px mdi-lead-pencil" aria-hidden="true"></i></a>
                                             <span>|</span>
                                             <span>|</span>
-                                            <a href="#"><i class="mdi mdi-24px mdi-delete-forever"
-                                                           aria-hidden="true"></i></a>
+                                            <a href="{% url 'container-status-delete' pk=container_status.id %}"><i
+                                                    class="mdi mdi-24px mdi-delete-forever"
+                                                    aria-hidden="true"></i></a>
                                         </td>
                                     </tr>
                                 {% endfor %}

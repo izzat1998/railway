@@ -1,0 +1,25 @@
+{% extends '_base.html' %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <!-- column -->
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post">{% csrf_token %}
+                            <p>Are you sure you want to delete "{{ object }}"?</p>
+                            <input class="btn btn-danger" type="submit" value="Confirm">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

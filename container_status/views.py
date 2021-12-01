@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, UpdateView, DeleteView
 
 from container_status.forms import SealImageFormSet
 from container_status.helper import upload_container_documents_by_train, read_excel_create_waiting_list, \
@@ -27,6 +27,14 @@ class ContainerStatusUpdate(View):
     def post(self, request, pk):
         upload_container_status(request, pk)
         return redirect(reverse_lazy('container-status-update', kwargs={'pk': pk}))
+
+
+class ContainerStatusDelete(DeleteView):
+    model = ContainerStatus
+    template_name = 'container_status/container_status_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('container-status-list')
 
 
 class ContainerStatusListByTrain(ListView):
