@@ -41,6 +41,7 @@
                                         <th class="border-top-0 text-center">Terminal</th>
                                         <th class="border-top-0 text-center">Container</th>
                                         <th class="border-top-0 text-center">Type</th>
+                                        <th class="border-top-0 text-center">State</th>
                                         <th class="border-top-0 text-center">Manager</th>
                                         <th class="border-top-0 text-center">Date</th>
                                         <th class="border-top-0 text-center">Waiting List</th>
@@ -53,6 +54,11 @@
                                             <td class="text-center">{{ container.terminal.name }}</td>
                                             <td class="text-center">{{ container.container.name }}</td>
                                             <td class="text-center">{{ container.container.weight_type }}</td>
+                                            {% if container.laden %}
+                                                <td class="text-center">Груженный</td>
+                                            {% else %}
+                                                <td class="text-center">Порожний</td>
+                                            {% endif %}
                                             <td class="text-center">{{ container.staff.user.username }}</td>
                                             <td class="text-center">{{ container.date_of_arrived }}</td>
                                             <td class="text-center"><a

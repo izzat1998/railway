@@ -18,6 +18,7 @@ class ContainerInTerminal(models.Model):
                                      on_delete=models.CASCADE, null=True)
     terminal = models.ForeignKey(Terminal, related_name='container_list_in_terminal', on_delete=models.CASCADE, )
     staff = models.ForeignKey(Staff, related_name='container_list_in_terminal', on_delete=models.CASCADE)
+    laden = models.BooleanField(default=False)
     date_of_arrived = models.DateField(blank=True, null=True)
 
     def __str__(self):

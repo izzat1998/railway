@@ -72,7 +72,6 @@
                                     <th class="border-top-0 text-center">№</th>
                                     <th class="border-top-0 text-center">Train</th>
                                     <th class="border-top-0 text-center">Container number</th>
-                                    <th class="border-top-0 text-center">Состояние</th>
                                     <th class="border-top-0 text-center">Arrived</th>
                                     <th class="border-top-0 text-center">Shipment documents</th>
                                     <th class="border-top-0 text-center">Plombs image</th>
@@ -89,12 +88,6 @@
                                                 href="{% url 'train-list' %}"> {{ container_status.train.name }}</a>
                                         </td>
                                         <td class="text-center">{{ container_status.cargo_container.name }}</td>
-                                        {% if container_status.laden %}
-                                           <td class="text-center">Груженный</td>
-                                            {% else %}
-                                            <td class="text-center">Порожний</td>
-                                        {% endif %}
-
                                         <td class="text-center">
                                             {% if container_status.arrived %}
                                                 <input class="form-check-input" name="arrived_status" type="checkbox"
