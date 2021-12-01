@@ -44,6 +44,6 @@ class WaitingList(models.Model):
         return self.container.name
 
 
-@receiver(pre_delete, sender=ContainerStatus)
-def send_data_terminal(sender, instance, *args, **kwargs):
-    ContainerInTerminal.objects.create(container_id=instance.cargo_container.id)
+# @receiver(pre_delete, sender=ContainerStatus)
+# def send_data_terminal(sender, instance, *args, **kwargs):
+#     ContainerInTerminal.objects.create(container_id=instance.cargo_container.id, train_id=instance.train.terminal_id)
