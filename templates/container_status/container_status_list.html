@@ -17,8 +17,8 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <div class="progress ">
-                            <div class="progress-bar arrived" role="progressbar" style="width: 35%" aria-valuenow="75"
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar arrived" role="progressbar" aria-valuenow="75"
                                  aria-valuemin="0"
                                  aria-valuemax="100"></div>
                         </div>
@@ -31,7 +31,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <div class="progress ">
+                         <div class="progress" style="height: 20px;">
                             <div class="progress-bar shipment_document" role="progressbar" style="width: 35%"
                                  aria-valuenow="75"
                                  aria-valuemin="0"
@@ -46,7 +46,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <div class="progress ">
+                         <div class="progress" style="height: 20px;">
                             <div class="progress-bar seal_image" role="progressbar" style="width: 35%"
                                  aria-valuenow="35"
                                  aria-valuemin="0"
@@ -60,11 +60,10 @@
                 <div class="card">
 
                     <div class="card-body">
-                        <h4 class="card-title"><a href="{% url 'railway-bill-create' %}"
+                        <h4 class="card-title"><a href="#"
                                                   class="btn btn-primary">Create</a>
 
                         </h4>
-                        <h6 class="card-subtitle">Add class <code>.table</code></h6>
                         <div>
                             <table id="container_status_table" class="row-border stripe compact">
                                 <thead>
@@ -222,7 +221,9 @@
         let noDocumentCounter = 0;
         let ArrivedCounter = 0;
         let noImageCounter = 0;
-
+        arrived = $('.arrived')
+        shipment_document = $('.shipment_document')
+        seal_image = $('.seal_image')
         const rowCount = $('#container_status_table > tbody tr').length;
         $('#container_status_table > tbody  > tr > td:nth-child(5)').each(function () {
             if (($(this).children("a").attr("href")) === undefined) {
@@ -237,9 +238,13 @@
         imageCounter = rowCount - noImageCounter
         const arrivedStatus = $('input[name="arrived_status"]:checked').length;
         documentCounter = rowCount - noDocumentCounter
-        $('.arrived').width(((arrivedStatus / rowCount) * 100) + '%')
-        $('.shipment_document').width(((documentCounter / rowCount) * 100) + '%')
-        $('.seal_image').width(((imageCounter / rowCount) * 100) + '%')
+
+        arrived.width(((arrivedStatus / rowCount) * 100) + '%')
+        arrived.text(arrivedStatus + '/' + rowCount)
+        shipment_document.width(((documentCounter / rowCount) * 100) + '%')
+        shipment_document.text(documentCounter + '/' + rowCount)
+        seal_image.width(((imageCounter / rowCount) * 100) + '%')
+        seal_image.text(imageCounter + '/' + rowCount)
 
 
         function open_modal(url_image) {
