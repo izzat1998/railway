@@ -38,11 +38,11 @@ class ContainerInTerminalSerializerCreate(serializers.Serializer):
         container.save()
         if WaitingList.objects.filter(container=container).exists():
             WaitingList.objects.get(container=container).delete()
-        ContainerStatus.objects.filter(cargo_container=container).update(arrived=True, laden=laden)
+        ContainerStatus.objects.filter(cargo_container=container).update(arrived=True)
 
         terminal = Terminal.objects.get(name=terminal_name)
         container_in_terminal = ContainerInTerminal.objects.get_or_create(container=container, terminal=terminal,
-                                                                          staff=staff[0],
+                                                                          staff=staff[0], laden=laden,
                                                                           date_of_arrived=date_of_arrived)
 
         return container_in_terminal
