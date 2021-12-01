@@ -11,6 +11,7 @@ class TrainList(ListView):
     model = Train
     context_object_name = 'trains'
     template_name = 'train/train_table.html'
+    ordering = '-id'
 
 
 class TrainCreate(CreateView):
