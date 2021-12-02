@@ -81,7 +81,9 @@
 {% block script %}
     <script>
         $(document).ready(function () {
-            $('#containers_in_terminal').DataTable();
+            $('#containers_in_terminal').DataTable({
+                "lengthMenu": [[50, 100, -1], [50, 100, "All"]]
+            });
         });
     </script>
 {% endblock %}

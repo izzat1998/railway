@@ -43,7 +43,8 @@
                                         </td>
                                         <td class="text-center">{{ train.type }}</td>
                                         <td class="text-center"><a
-                                                href="{% url 'railway-bill-list-by-train' pk=train.id %}">SMGS forms</a></td>
+                                                href="{% url 'railway-bill-list-by-train' pk=train.id %}">SMGS forms</a>
+                                        </td>
 
                                         <td class="text-center"><a
                                                 href="{% url 'train-pre-upload-excel' pk=train.id %}">SMGS</a></td>
@@ -89,7 +90,9 @@
     <script src="{% static 'js/dataTable.js' %}"></script>
     <script>
         $(document).ready(function () {
-            $('#myTable').DataTable();
+            $('#myTable').DataTable({
+                "lengthMenu": [[50, 100, -1], [50, 100, "All"]]
+            });
         });
     </script>
 {% endblock %}

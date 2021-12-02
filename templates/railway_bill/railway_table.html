@@ -3,7 +3,7 @@
 {% block link %}
 
     <link rel="stylesheet" href="{% static 'css/crud.css' %}">
-     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 {% endblock %}
 {% block content %}
     <div class="container-fluid">
@@ -19,7 +19,7 @@
                                                   class="btn btn-primary">Create</a>
                         </h4>
                         <h6 class="card-subtitle">Add class <code>.table</code></h6>
-                        <div >
+                        <div>
                             <table id="myTable" class="row-border stripe compact">
                                 <thead>
                                 <tr>
@@ -41,9 +41,9 @@
                                                 href="{% url 'train-list' %}"> {{ bill.train.name }}</a></td>
                                         <td class="text-center">{{ bill.container.name }}</td>
                                         <td class="text-center"><a href="{{ bill.file_original.url }}"
-                                                                   ><i
+                                        ><i
                                                 class="mdi mdi-24px mdi-file-word"></i></a></td>
-                                        <td class="text-center"><a href="{{ bill.file.url }}" >
+                                        <td class="text-center"><a href="{{ bill.file.url }}">
                                             <i class="mdi mdi-24px mdi-file-word"></i>
                                         </a>
                                         </td>
@@ -92,15 +92,11 @@
     {#    <script src="{% static 'js/dataTable.js' %}"></script>#}
     <script>
         $(document).ready(function () {
-            var my_table = $('#myTable').DataTable();
-            $('#myTable tbody').on('click', 'tr', function () {
-                $(this).toggleClass('selected');
-                var count = my_table.rows({selected: true}).count();
+            $('#myTable').DataTable({
+                "lengthMenu": [[50, 100, -1], [50, 100, "All"]]
             });
 
-            $('#for_print').click(function () {
-                $("#tableRowNumber").text($(this).index() + 1);
-            });
+
         })
         ;
     </script>
