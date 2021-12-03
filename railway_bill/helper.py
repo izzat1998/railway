@@ -90,8 +90,10 @@ def convert_excel_data_to_railway_data(train_id, excel_data):
     df = df.replace(np.nan, '', regex=True)
     ready_data = {}
     for index, row in df.iterrows():
-        container, created = Container.objects.get_or_create(name=row['НОМЕР КОНТЕЙНЕРА'], weight_type=row['ТИП КНТР'],
-                                                             weight_type_code=row['ТИП G1'])
+        container, created = Container.objects.get_or_create(name=row['НОМЕР КОНТЕЙНЕРА'])
+        container.weight_type = row['ТИП КНТР'],
+        container.weight_type_code = row['ТИП G1']
+        container.save()
         train, _ = Train.objects.get_or_create(id=train_id)
         if index == 0:
             existed_railway = RailwayBill.objects.filter(train=train)
