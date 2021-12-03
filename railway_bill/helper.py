@@ -126,10 +126,8 @@ def convert_excel_data_to_railway_data(train_id, excel_data):
         ready_data['documents_by_sender'] = row['Документы. приложенные отправителем']
         ready_data['additional_information'] = row[
             'Информация. не предназначенная для перевозчика. № договора  по поставку']
-        if row['ТЖ ПЛОМБА'] != '':
-            ready_data['custom_seal'] = int(row['ТЖ ПЛОМБА'])
-        else:
-            ready_data['custom_seal'] = row['ТЖ ПЛОМБА']
+
+        ready_data['custom_seal'] = row['ТЖ ПЛОМБА']
         ready_data['inspector_name'] = row['ИМЯ ИНСПЕКТОРА']
         ready_data['date'] = row['Дата']
         pre_files = create_railway_document(ready_data, container)
