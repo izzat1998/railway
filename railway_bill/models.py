@@ -15,7 +15,6 @@ class Container(models.Model):
     )
     weight_type_code_choices = (
         ('22G1', '22G1'),
-        ('42G1', '45G1'),
         ('45G1', '45G1'),
         ('L5G1', 'L5G1'),
     )

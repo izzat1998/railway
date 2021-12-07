@@ -277,9 +277,7 @@
     <!-- Pushable content along with off-canvas opener. -->
 
     <div class="page-wrapper">
-
-
-        <div id="bs-canvas-right" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100">
+    <div id="bs-canvas-right" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100">
             <header class="bs-canvas-header p-3  overflow-auto">
                 <button type="button" class="btn-close bs-canvas-close float-right" data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
@@ -295,6 +293,7 @@
                     </thead>
                     <tbody>
                     {% for waiting_container in  waiting_containers %}
+
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ waiting_container.container.name }}</td>
@@ -305,19 +304,8 @@
                     </tbody>
                 </table>
             </div>
-            <footer>
-                <form action="{% url 'upload-waiting-list-excel' %}"
-                      method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="exampleFormControlFile1">For planned containers (Excel)</label>
-                        <input type="file" name="waiting_list_excel" class="form-control"
-                               id="exampleFormControlFile1">
-                    </div>
-                    <input type="submit" value="Upload" class="btn btn-success">
-                </form>
-            </footer>
         </div>
+
         {% block content %}
 
 
@@ -357,6 +345,7 @@
 <script src="{% static 'js/pages/dashboards/dashboard1.js' %}"></script>
 <script src="{% static 'js/custom.js' %}"></script>
 <script src="{% static 'js/dataTable.js' %}"></script>
+
 <script>
     jQuery(document).ready(function ($) {
         var bsDefaults = {

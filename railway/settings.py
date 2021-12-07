@@ -76,7 +76,7 @@ TEMPLATES = [
                 # custom context_processors
                 'train.context_processors.access_terminals',
                 'train.context_processors.access_trains',
-                'container_status.context_processor.access_container_status_list',
+                'terminal.context_processors.access_waiting_containers_list',
             ],
         },
     },
@@ -90,8 +90,8 @@ WSGI_APPLICATION = 'railway.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'izzat',
+        'NAME': 'interrail',
+        'USER': 'postgres',
         'HOST': 'localhost',
         'PASSWORD': '1',
         'PORT': '5432',
@@ -129,6 +129,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_REDIRECT_URL = '/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 

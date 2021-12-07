@@ -87,13 +87,15 @@
                                         <td class="text-center"><a
                                                 href="{% url 'train-list' %}"> {{ container_status.train.name }}</a>
                                         </td>
-                                        <td class="text-center">{{ container_status.cargo_container.name }}</td>
+                                        <td class="text-center">{{ container_status.container_in_terminal.container.name }}</td>
                                         <td class="text-center">
-                                            {% if container_status.arrived %}
-                                                <input class="form-check-input" name="arrived_status" type="checkbox"
+                                            {% if container_status.container_in_terminal.arrived %}
+                                                <input class="form-check-input" name="arrived_status"
+                                                       type="checkbox"
                                                        id="inlineCheckbox1" checked disabled>
                                             {% else %}
-                                                <input class="form-check-input" name="arrived_status" type="checkbox"
+                                                <input class="form-check-input" name="arrived_status"
+                                                       type="checkbox"
                                                        id="inlineCheckbox1"
                                                        disabled>
                                             {% endif %}
@@ -101,37 +103,35 @@
 
                                         </td>
                                         <td class="text-center">
-                                            {% if container_status.container_documents.first %}
-                                                {% for container_document in container_status.container_documents.all %}
-                                                    <a href="{{ container_document.document.url }}">
-                                                        <i class="mdi mdi-24px mdi-file-pdf"></i>
-                                                    </a>
-                                                {% endfor %}
-
-
-                                            {% else %}
-
-                                            {% endif %}
+                                            {% for container_document in container_status.container_in_terminal.container_documents.all %}
+                                                <a href="{{ container_document.document.url }}">
+                                                    <i class="mdi mdi-24px mdi-file-pdf"></i>
+                                                </a>
+                                            {% endfor %}
 
 
                                         </td>
                                         <td class="text-center">
-                                            {% for seal_image in container_status.seal_images.all %}
+                                            {% for seal_image in container_status.container_in_terminal.seal_images.all %}
                                                 <img src="{{ seal_image.image.url }}"
-                                                     onclick="open_modal('{{ seal_image.image.url }}')" width="25px">
-                                                </img>
+                                                     onclick="open_modal('{{ seal_image.image.url }}')"
+                                                     width="25px">
                                             {% endfor %}
                                         </td>
                                         <td class="text-center">
-                                            <a href="{% url 'container-status-update' pk=container_status.id %}"><i
-                                                    class="mdi mdi-24px mdi-lead-pencil" aria-hidden="true"></i></a>
-                                            <span>|</span>
-                                            <span>|</span>
-                                            <a href="{% url 'container-status-delete' pk=container_status.id %}"><i
-                                                    class="mdi mdi-24px mdi-delete-forever"
-                                                    aria-hidden="true"></i></a>
+                                            {% if container_status.container_in_terminal %}
+                                                <a href="{% url 'container-in-terminal-update' pk=container_status.container_in_terminal.pk %}"><i
+                                                        class="mdi mdi-24px mdi-lead-pencil" aria-hidden="true"></i></a>
+                                                <span>|</span>
+                                                <span>|</span>
+                                                <a href="{% url 'container-status-delete' pk=container_status.pk %}"><i
+                                                        class="mdi mdi-24px mdi-delete-forever"
+                                                        aria-hidden="true"></i></a>
+                                            {% endif %}
+
                                         </td>
                                     </tr>
+
                                 {% endfor %}
 
 
@@ -143,26 +143,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                {% if  container_status_list.count != 0 %}
-                                    <form action="{% url 'upload-container-documents' train_id=container_status_list.first.train_id %}"
-                                          method="post" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        <div class="form-group">
-                                            <label for="exampleFormControlFile1">For documents</label>
-                                            <input type="file" name="container_files" class="form-control" multiple
-                                                   id="exampleFormControlFile1">
-                                        </div>
-                                        <input type="submit" value="Upload" class="btn btn-success">
-                                    </form>
-                                {% endif %}
 
-                            </div>
-                            <div class="col-lg-6">
-
-                            </div>
-                        </div>
 
                     </div>
                 </div>
@@ -258,7 +239,7 @@
         $(document).ready(function () {
 
             $(' #container_status_table').DataTable({
-                 "lengthMenu": [[50, 100, -1], [50, 100, "All"]]
+                "lengthMenu": [[50, 100, -1], [50, 100, "All"]]
 
             });
 

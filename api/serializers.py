@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from container_status.models import WaitingList, ContainerStatus
+from container_status.models import ContainerStatus
 from railway_bill.models import Container
 from staff.models import Staff
 from terminal.models import ContainerInTerminal, Terminal
@@ -15,10 +15,6 @@ class ContainerInTerminalSerializerCreate(serializers.Serializer):
     date_of_arrived = serializers.DateField()
 
     def validate(self, data):
-        containers = Container.objects.filter(name=data['container_name'])
-        if containers.exists():
-            if ContainerInTerminal.objects.filter(container=containers[0]).exists():
-                raise serializers.ValidationError("This Container is already in Terminal")
         if not Terminal.objects.filter(name=data['terminal_name']).exists():
             raise serializers.ValidationError("This Terminal doesn`t exist")
         if not Staff.objects.filter(telegram_id=data['telegram_id']).exists():
@@ -36,13 +32,17 @@ class ContainerInTerminalSerializerCreate(serializers.Serializer):
         container, _ = Container.objects.get_or_create(name=container_name)
         container.weight_type = container_type
         container.save()
-        if WaitingList.objects.filter(container=container).exists():
-            WaitingList.objects.get(container=container).delete()
-        ContainerStatus.objects.filter(cargo_container=container).update(arrived=True)
-
         terminal = Terminal.objects.get(name=terminal_name)
-        container_in_terminal = ContainerInTerminal.objects.get_or_create(container=container, terminal=terminal,
-                                                                          staff=staff[0], laden=laden,
-                                                                          date_of_arrived=date_of_arrived)
+        container_in_terminal = ContainerInTerminal.objects.filter(container=container)
+        if container_in_terminal.exists():
+            container_in_terminal = container_in_terminal.first()
+            container_in_terminal.arrived = True
+            container_in_terminal.save()
+        else:
+            container_in_terminal = ContainerInTerminal.objects.create(container=container, terminal=terminal,
+                                                                       staff=staff[0], laden=laden,
+                                                                       date_of_arrived=date_of_arrived)
+        ContainerStatus.objects.filter(container_in_terminal__container=container).update(
+            container_in_terminal=container_in_terminal)
 
         return container_in_terminal

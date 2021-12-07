@@ -80,6 +80,7 @@ class SMGSUpload(View):
     def post(self, request):
         train_id = request.POST.get('train_id')
         excel_file = request.FILES['excel']
+        user = request.user
 
-        convert_excel_data_to_railway_data(train_id, excel_file)
+        convert_excel_data_to_railway_data(train_id, excel_file,user)
         return redirect(reverse_lazy('railway-bill-list-by-train', kwargs={'pk': train_id}))

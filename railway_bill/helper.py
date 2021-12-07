@@ -1,3 +1,5 @@
+import datetime
+
 import numpy as np
 import pandas as pd
 import os
@@ -7,9 +9,10 @@ from io import StringIO
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 
-from container_status.models import ContainerStatus, WaitingList
+from container_status.models import ContainerStatus
 from railway.settings import BASE_DIR
 from railway_bill.models import RailwayBill, Container
+from staff.models import Staff
 from terminal.models import ContainerInTerminal
 from train.models import Train
 from docxtpl import DocxTemplate
@@ -85,7 +88,7 @@ def create_railway_document(ready_data, container):
         raise FileExistsError
 
 
-def convert_excel_data_to_railway_data(train_id, excel_data):
+def convert_excel_data_to_railway_data(train_id, excel_data, user):
     df = pd.read_excel(excel_data)
     df = df.replace(np.nan, '', regex=True)
     ready_data = {}
@@ -135,10 +138,13 @@ def convert_excel_data_to_railway_data(train_id, excel_data):
         file_original = open(pre_files[1])
         ready_data['file'] = file_draft.name.replace('media/', '')
         ready_data['file_original'] = file_original.name.replace('media/', '')
-        if ContainerInTerminal.objects.filter(container=container).exists():
-            ContainerStatus.objects.create(train_id=train_id, cargo_container=container, arrived=True)
-
+        container_in_terminal = ContainerInTerminal.objects.filter(container=container)
+        if container_in_terminal.exists():
+            container_in_terminal.first().arrived = True
+            container_in_terminal.first().save()
         else:
-            WaitingList.objects.get_or_create(container=container)
-            ContainerStatus.objects.get_or_create(train_id=train_id, cargo_container=container, arrived=False)
+
+            ContainerInTerminal.objects.create(container=container, terminal=train.terminal,staff_id=user.id, laden=False)
+        ContainerStatus.objects.get_or_create(train_id=train_id, container_in_terminal=container_in_terminal.first())
+
         RailwayBill.objects.create(**ready_data)

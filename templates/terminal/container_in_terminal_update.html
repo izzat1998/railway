@@ -6,7 +6,7 @@
         <!-- Start Page Content -->
         <!-- ============================================================== -->
 
-        <form action="{% url 'container-status-update' pk=container_status.id %}" method="post"
+        <form action="#" method="post"
               enctype="multipart/form-data">
             {% csrf_token %}
             <!-- column -->
@@ -14,28 +14,33 @@
                 <div class="col-sm-2">
                     <div class="card">
                         <div class="card-header">
-                            <h4>{{ container_status }}</h4>
+                            <h4>{{ container_in_terminal }}</h4>
                             <h5>Container Data</h5>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label" for="inlineCheckbox1">Arrived</label>
-                                    <input class="form-check-input" name="arrived" type="checkbox" id="inlineCheckbox1"
-                                            {% if arrived %} checked {% endif %}
-                                    >
-
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="train">Train</label>
-                                <select class="form-control"  name="train">
-                                    {% for train in trains %}
-                                        <option name="train" value="{{ train.id }}" {% if train.id == current_train.id %}
-                                                selected{% endif %}>{{ train.name }}</option>
+                                <label for="train">Terminal</label>
+                                <select class="form-control" name="terminal">
+                                    {% for terminal in terminals %}
+                                        <option name="terminal" value="{{ terminal.id }}"
+                                                {% if terminal.id == container_in_terminal.terminal.id %}
+                                                selected{% endif %}>{{ terminal.name }}</option>
                                     {% endfor %}
 
                                 </select>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" for="inlineCheckbox1">Laden</label>
+                                    <input class="form-check-input" name="laden" type="checkbox" id="inlineCheckbox1"
+                                            {% if laden %} checked {% endif %}
+                                    >
+
+
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" for="inlineCheckbox2">Arrived</label>
+                                    <input class="form-check-input" name="arrived" type="checkbox" id="inlineCheckbox2"
+                                            {% if arrived %} checked {% endif %}>
+                                </div>
                             </div>
 
                         </div>

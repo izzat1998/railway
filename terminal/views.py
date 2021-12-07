@@ -1,12 +1,14 @@
 from django.dispatch import receiver
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.db import models
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DeleteView
 
-from container_status.models import WaitingList
+from terminal.helper import upload_container_documents_inner, get_container_in_terminal_data, \
+    update_container_in_terminal
 from terminal.models import ContainerInTerminal
 from train.models import Terminal, Train
 
@@ -17,7 +19,8 @@ class TerminalList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(TerminalList, self).get_context_data(**kwargs)
-        context['containers_in_terminal'] = ContainerInTerminal.objects.all()
+        context['containers_in_terminal'] = ContainerInTerminal.objects.filter(arrived=True)
+        context['containers_in_waiting_list'] = ContainerInTerminal.objects.filter(arrived=False)
         return context
 
 
@@ -36,15 +39,22 @@ class ContainersByTerminal(ListView):
         return context
 
 
-class ContainerInTerminalDelete(DeleteView):
-    model = ContainerInTerminal
-    template_name = 'terminal/container_in_terminal_delete.html'
-
-    def get_success_url(self):
-        return reverse_lazy('terminal-list')
+class ContainerInTerminalSendWaitingList(View):
+    def get(self, request, pk):
+        ContainerInTerminal.objects.filter(pk=pk).update(arrived=False)
+        return HttpResponseRedirect(reverse_lazy('terminal-list'))
 
 
-@receiver(models.signals.post_delete, sender=ContainerInTerminal)
-def delete_file(sender, instance, *args, **kwargs):
-    """ Deletes image files on `post_delete` """
-    WaitingList.objects.get_or_create(container_id=instance.container.id)
+class ContainerInTerminalUpdate(View):
+    def get(self, request, pk):
+        context = get_container_in_terminal_data(pk)
+        return render(request, 'terminal/container_in_terminal_update.html', context=context)
+
+    def post(self, request, pk):
+        update_container_in_terminal(request, pk)
+        return redirect(reverse_lazy('container-status-list'))
+
+
+def upload_container_in_terminal_documents(request):
+    upload_container_documents_inner(request.FILES.getlist('container_files'))
+    return HttpResponseRedirect(reverse_lazy('terminal-list'))

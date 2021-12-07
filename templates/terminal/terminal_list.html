@@ -3,23 +3,24 @@
 
 {% block link %}
 {% endblock %}
+
 {% block content %}
     <div class="container-fluid">
         <div class="row">
             <!-- Column -->
             <div class="row">
-                {% for terminal in terminals %}
+                {% for data in terminal_data %}
                     <div class="col">
                         <div class="card text-center">
                             <div class="card-header">
                                 Terminal
                             </div>
                             <div class="card-body">
-                                <a href="{% url 'container-list-in-terminal' pk=terminal.pk %}"><h5
-                                        class="card-title">{{ terminal.name }}</h5></a>
+                                <a href="{% url 'container-list-in-terminal' pk=data.terminal.pk %}"><h5
+                                        class="card-title">{{ data.terminal.name }}</h5></a>
                             </div>
                             <div class="card-footer text-muted">
-                                <span> {{ terminal.container_list_in_terminal.all.count }} Containers</span>
+                                <span> {{ data.count }} Containers</span>
                             </div>
                         </div>
                     </div>
@@ -43,6 +44,8 @@
                                         <th class="border-top-0 text-center">Type</th>
                                         <th class="border-top-0 text-center">State</th>
                                         <th class="border-top-0 text-center">Manager</th>
+                                        <th class="border-top-0 text-center">Documents</th>
+                                        <th class="border-top-0 text-center">Seal Images</th>
                                         <th class="border-top-0 text-center">Date</th>
                                         <th class="border-top-0 text-center">Waiting List</th>
                                     </tr>
@@ -60,8 +63,26 @@
                                                 <td class="text-center">Порожний</td>
                                             {% endif %}
                                             <td class="text-center">{{ container.staff.user.username }}</td>
+                                            <td class="text-center">
+                                                {% for container_document in container.container_documents.all %}
+                                                    <a href="{{ container_document.document.url }}">
+                                                        <i class="mdi mdi-24px mdi-file-pdf"></i>
+                                                    </a>
+                                                {% endfor %}
+                                            </td>
+                                            <td class="text-center">
+                                                {% for seal_image in container.seal_images.all %}
+                                                    <img src="{{ seal_image.image.url }}"
+                                                         onclick="open_modal('{{ seal_image.image.url }}')"
+                                                         width="25px">
+                                                {% endfor %}
+                                            </td>
                                             <td class="text-center">{{ container.date_of_arrived }}</td>
-                                            <td class="text-center"><a
+                                            <td class="text-center">
+                                                <a href="{% url 'container-in-terminal-update' pk=container.id %}"><i
+                                                        class="mdi mdi-24px mdi-lead-pencil" aria-hidden="true"></i></a>
+                                                <span>|</span>
+                                                <span>|</span><a
                                                     href="{% url 'container-in-terminal-delete' pk=container.id %}">
                                                 <i class="mdi mdi-24px mdi-delete-forever"
                                                    aria-hidden="true"></i></a></td>
@@ -71,7 +92,69 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form action="{% url 'upload-container-in-terminal-documents' %}"
+                                          method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="exampleFormControlFile1">For documents</label>
+                                            <input type="file" name="container_files" class="form-control" multiple
+                                                   id="exampleFormControlFile1">
+                                        </div>
+                                        <input type="submit" value="Upload" class="btn btn-success">
+                                    </form>
+
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
+                </div>
+
+                <div
+                        class="modal fade"
+                        id="plomb_images"
+                        tabindex="-1"
+                        aria-labelledby="bs-example-modal-lg"
+                        aria-hidden="true"
+                >
+                    <div class="modal-dialog modal-md">
+                        <div class="modal-content">
+                            <div class="modal-header d-flex align-items-center">
+                                <h4 class="modal-title" id="myLargeModalLabel">
+                                    Seal Image
+                                </h4>
+                                <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                        onclick="clear_all_data()"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div id="modal_plombs_body">
+                                    <div id="carouselExampleCaptions" class="carousel slide carousel-dark"
+                                         data-bs-ride="carousel">
+
+                                        <div class="carousel-inner" id="carousel_plomb_images">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
                 </div>
             </div>
         </div>
@@ -85,5 +168,12 @@
                 "lengthMenu": [[50, 100, -1], [50, 100, "All"]]
             });
         });
+
+        function open_modal(url_image) {
+
+            var img_div = '<div class="carousel-item active text-center"><img  src="' + url_image + '" width="70%"> </div>';
+            $("#carousel_plomb_images").append(img_div);
+            $('#plomb_images').modal('show')
+        }
     </script>
 {% endblock %}
