@@ -151,13 +151,14 @@
                     <!-- User profile and search -->
                     <!-- ============================================================== -->
                     {% if user.is_authenticated %}
-                        <li class="nav-item"><a href="{% url 'logout' %}" class="btn btn-success">Log out</a></li>
+                        <li class="nav-item" style="margin-right: 20px;"><a href="{% url 'logout' %}" class="btn btn-primary">Log out</a></li>
 
                     {% else %}
                         <li>
-                            <a href="{% url 'login' %}" class="btn btn-success">Log in</a>
+                            <a href="{% url 'login' %}" class="btn btn-success" style="margin-right: 20px;">Log in</a>
                         </li>
                     {% endif %}
+
 
                     <li class="nav-item ">
                         <button class="btn btn-success" type="button" data-toggle="canvas"
