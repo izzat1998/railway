@@ -18,40 +18,6 @@
     />
     <meta name="robots" content="noindex,nofollow"/>
 
-    <style>
-        .bs-canvas-overlay {
-            opacity: 0;
-            z-index: -1;
-        }
-
-        .bs-canvas-overlay.show {
-            opacity: 0.85;
-            z-index: 1100;
-        }
-
-        .bs-canvas {
-            top: 0;
-            width: 0;
-            z-index: 1110;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        .bs-canvas-left {
-            left: 0;
-        }
-
-        .bs-canvas-right {
-            right: 0;
-        }
-
-        .bs-canvas-anim {
-            transition: all .2s ease-out;
-            -webkit-transition: all .2s ease-out;
-            -moz-transition: all .2s ease-out;
-            -ms-transition: all .2s ease-out;
-        }
-    </style>
 
     <!-- Favicon icon -->
     <link
@@ -150,22 +116,15 @@
                     <!-- ============================================================== -->
                     <!-- User profile and search -->
                     <!-- ============================================================== -->
-                    <li class="nav-item " style="margin-right:20px">
-                        <a href="{% url 'train-calendar' %}" class="btn btn-primary"
-                           aria-expanded="false" aria-controls="bs-canvas-right">&#9776 Train Calendar
-                        </a>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}" class="btn btn-success">Log out</a></li>
 
+                    {% else %}
+                        <li>
+                            <a href="{% url 'login' %}" class="btn btn-success">Log in</a>
+                        </li>
+                    {% endif %}
 
-                    </li>
-
-                    <li class="nav-item ">
-                        <button class="btn btn-success" type="button" data-toggle="canvas"
-                                data-target="#bs-canvas-right"
-                                aria-expanded="false" aria-controls="bs-canvas-right">&#9776 Container waiting list
-                        </button>
-
-
-                    </li>
                 </ul>
             </div>
         </nav>
@@ -182,48 +141,10 @@
             <!-- Sidebar navigation-->
             <nav class="sidebar-nav">
                 <ul id="sidebarnav">
+                    {% block sidebar %}
+                    {% endblock %}
                     <!-- User Profile-->
-                    <li class="sidebar-item">
-                        <a
-                                class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="{% url 'terminal-list' %}"
-                                aria-expanded="false">
-                            <i class="mdi me-2 mdi-gauge"></i
-                            ><span class="hide-menu">Terminals</span></a
-                        >
-                    </li>
-                    <li class="sidebar-item">
-                        <a
-                                class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="{% url 'train-list' %}"
-                                aria-expanded="false"
-                        >
-                            <i class="mdi me-2 mdi-train"></i
-                            ><span class="hide-menu">Trains</span></a
-                        >
-                    </li>
 
-                    <li class="sidebar-item">
-                        <a
-                                class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="{% url 'railway-bill-list' %}"
-                                aria-expanded="false"
-                        >
-                            <i class="mdi me-2 mdi-file"></i
-                            ><span class="hide-menu">SMGS</span></a
-                        >
-                    </li>
-
-                    <li class="sidebar-item">
-                        <a
-                                class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="{% url 'container-status-list' %}"
-                                aria-expanded="false"
-                        >
-                            <i class="mdi me-2 mdi-file"></i
-                            ><span class="hide-menu">Containers status</span></a
-                        >
-                    </li>
 
                 </ul>
             </nav>
@@ -268,43 +189,7 @@
             </div>
         </div>
     </aside>
-    <!-- ============================================================== -->
-    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Page wrapper  -->
-    <!-- ============================================================== -->
-    <!-- Pushable content along with off-canvas opener. -->
-
     <div class="page-wrapper">
-    <div id="bs-canvas-right" class="bs-canvas bs-canvas-anim bs-canvas-right position-fixed bg-light h-100">
-            <header class="bs-canvas-header p-3  overflow-auto">
-                <button type="button" class="btn-close bs-canvas-close float-right" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-            </header>
-            <div class="bs-canvas-content px-3 py-5">
-                <table id="waiting_container_list" class="cell-border stripe compact">
-                    <thead>
-                    <tr>
-                        <th>№</th>
-                        <th>Container</th>
-                        <th>Type</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for waiting_container in  waiting_containers %}
-
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ waiting_container.container.name }}</td>
-                            <td>{{ waiting_container.container.weight_type }}</td>
-
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
         {% block content %}
 
@@ -313,6 +198,7 @@
 
         <!-- ============================================================== -->
     </div>
+
     <!-- ============================================================== -->
     <!-- End Page wrapper  -->
     <!-- ============================================================== -->

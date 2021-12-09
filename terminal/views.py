@@ -31,7 +31,7 @@ class ContainersByTerminal(ListView):
 
     def get_queryset(self):
         terminal_id = self.kwargs.get('pk', '')
-        return ContainerInTerminal.objects.filter(terminal_id=terminal_id)
+        return ContainerInTerminal.objects.filter(terminal_id=terminal_id, arrived=True)
 
     def get_context_data(self, **kwargs):
         context = super(ContainersByTerminal, self).get_context_data(**kwargs)

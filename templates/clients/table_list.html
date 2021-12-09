@@ -1,0 +1,245 @@
+{% extends '_base_external.html' %}
+{% block sidebar %}
+    {% for train in trains_by_client %}
+        <li class="sidebar-item">
+            <a
+                    class="sidebar-link waves-effect waves-dark sidebar-link"
+                    href="{% url 'client-table-list-by-train' pk=train.pk %}"
+                    aria-expanded="false">
+                <i class="mdi me-2 mdi-train"></i
+                ><span class="hide-menu">{{ train.name }}</span></a
+            >
+        </li>
+    {% endfor %}
+
+
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
+        <div class="row">
+            <!-- column -->
+            <div class="col-sm-4">
+                <div class="card-header text-center">
+                    <h6>Arrived</h6>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar arrived" role="progressbar" aria-valuenow="75"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card-header text-center">
+                    <h6>Shipment Documents</h6>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar shipment_document" role="progressbar"
+                                 aria-valuenow="75"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card-header text-center">
+                    <h6>Seal images</h6>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar seal_image" role="progressbar"
+                                 aria-valuenow="35"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+
+                <div class="card">
+
+                    <div class="card-body">
+                        <div>
+                            <div>
+                                <table id="container_status_table" class="row-border stripe compact">
+                                    <thead>
+                                    <tr>
+
+                                        <th class="border-top-0 text-center">№</th>
+                                        <th class="border-top-0 text-center">Train</th>
+                                        <th class="border-top-0 text-center">Container number</th>
+                                        <th class="border-top-0 text-center">Arrived</th>
+                                        <th class="border-top-0 text-center">Shipment documents</th>
+                                        <th class="border-top-0 text-center">Seal image</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for container_status in container_status_list %}
+                                        <tr>
+                                            <td class="text-center">{{ forloop.counter }}</td>
+                                            <td class="text-center"><a
+                                                    href="{% url 'train-list' %}"> {{ container_status.train.name }}</a>
+                                            </td>
+                                            <td class="text-center">{{ container_status.container_in_terminal.container.name }}</td>
+                                            <td class="text-center">
+                                                {% if container_status.container_in_terminal.arrived %}
+                                                    <input class="form-check-input" name="arrived_status"
+                                                           type="checkbox"
+                                                           id="inlineCheckbox1" checked disabled>
+                                                {% else %}
+                                                    <input class="form-check-input" name="arrived_status"
+                                                           type="checkbox"
+                                                           id="inlineCheckbox1"
+                                                           disabled>
+                                                {% endif %}
+
+
+                                            </td>
+                                            <td class="text-center">
+                                                {% for container_document in container_status.container_in_terminal.container_documents.all %}
+                                                    <a href="{{ container_document.document.url }}">
+                                                        <i class="mdi mdi-24px mdi-file-pdf"></i>
+                                                    </a>
+                                                {% endfor %}
+
+
+                                            </td>
+                                            <td class="text-center">
+                                                {% for seal_image in container_status.container_in_terminal.seal_images.all %}
+                                                    <img src="{{ seal_image.image.url }}"
+                                                         onclick="open_modal('{{ seal_image.image.url }}')"
+                                                         width="25px">
+                                                {% endfor %}
+                                            </td>
+                                        </tr>
+
+                                    {% endfor %}
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer  ">
+
+                        </div>
+                    </div>
+                    <div class="card-footer">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div
+                class="modal fade"
+                id="plomb_images"
+                tabindex="-1"
+                aria-labelledby="bs-example-modal-lg"
+                aria-hidden="true"
+        >
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header d-flex align-items-center">
+                        <h4 class="modal-title" id="myLargeModalLabel">
+                            Seal Image
+                        </h4>
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                                onclick="clear_all_data()"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div id="modal_plombs_body">
+                            <div id="carouselExampleCaptions" class="carousel slide carousel-dark"
+                                 data-bs-ride="carousel">
+
+                                <div class="carousel-inner" id="carousel_plomb_images">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        let noDocumentCounter = 0;
+        let ArrivedCounter = 0;
+        let noImageCounter = 0;
+        arrived = $('.arrived')
+        shipment_document = $('.shipment_document')
+        seal_image = $('.seal_image')
+        const rowCount = $('#container_status_table > tbody tr').length;
+        $('#container_status_table > tbody  > tr > td:nth-child(5)').each(function () {
+            if (($(this).children("a").attr("href")) === undefined) {
+                noDocumentCounter += 1;
+            }
+        });
+        $('#container_status_table > tbody  > tr > td:nth-child(6)').each(function () {
+            if (($(this).children("img").attr("src")) === undefined) {
+                noImageCounter += 1;
+            }
+        });
+        imageCounter = rowCount - noImageCounter
+        const arrivedStatus = $('input[name="arrived_status"]:checked').length;
+        documentCounter = rowCount - noDocumentCounter
+
+        arrived.width(((arrivedStatus / rowCount) * 100) + '%')
+        arrived.text(arrivedStatus + '/' + rowCount)
+        shipment_document.width(((documentCounter / rowCount) * 100) + '%')
+        shipment_document.text(documentCounter + '/' + rowCount)
+        seal_image.width(((imageCounter / rowCount) * 100) + '%')
+        seal_image.text(imageCounter + '/' + rowCount)
+
+
+        function open_modal(url_image) {
+
+            var img_div = '<div class="carousel-item active text-center"><img  src="' + url_image + '" width="70%"> </div>';
+            $("#carousel_plomb_images").append(img_div);
+            $('#plomb_images').modal('show')
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+
+            $(' #container_status_table').DataTable({
+                "lengthMenu": [[50, 100, -1], [50, 100, "All"]]
+
+            });
+
+        })
+
+        function open_client_modal(pk) {
+            $('#bs-example-modal-xlg').modal('show')
+            document.getElementById('container_status_id').value = pk
+        }
+
+
+    </script>
+{% endblock %}

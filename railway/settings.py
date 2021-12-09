@@ -77,6 +77,7 @@ TEMPLATES = [
                 'train.context_processors.access_terminals',
                 'train.context_processors.access_trains',
                 'terminal.context_processors.access_waiting_containers_list',
+                'staff.context_processors.access_client_list'
             ],
         },
     },
@@ -129,7 +130,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'client-table-list'
+LOGOUT_REDIRECT_URL = 'client-table-list'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 

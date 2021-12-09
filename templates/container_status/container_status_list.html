@@ -1,4 +1,4 @@
-{% extends '_base.html' %}
+{% extends '_base_internal.html' %}
 {% load static %}
 {% block link %}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
@@ -76,6 +76,7 @@
                                     <th class="border-top-0 text-center">Shipment documents</th>
                                     <th class="border-top-0 text-center">Plombs image</th>
                                     <th class="border-top-0 text-center">Update</th>
+                                    <th class="border-top-0 text-center">Clients</th>
 
                                 </tr>
                                 </thead>
@@ -130,6 +131,10 @@
                                             {% endif %}
 
                                         </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-secondary" id="select_client"
+                                               onclick="open_client_modal('{{ container_status.pk }}')">Select</a>
+                                        </td>
                                     </tr>
 
                                 {% endfor %}
@@ -138,29 +143,23 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="card-footer  ">
-
-                        </div>
-                    </div>
-                    <div class="card-footer">
-
-
                     </div>
                 </div>
             </div>
         </div>
         <div
                 class="modal fade"
-                id="plomb_images"
+                id="bs-example-modal-xlg"
                 tabindex="-1"
                 aria-labelledby="bs-example-modal-lg"
                 aria-hidden="true"
         >
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
+
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myLargeModalLabel">
-                            Seal Image
+                            Client List
                         </h4>
                         <button
                                 type="button"
@@ -172,17 +171,52 @@
                     </div>
                     <div class="modal-body">
 
-                        <div id="modal_plombs_body">
-                            <div id="carouselExampleCaptions" class="carousel slide carousel-dark"
-                                 data-bs-ride="carousel">
 
-                                <div class="carousel-inner" id="carousel_plomb_images">
-                                </div>
+                        <div class="container">
+
+                            <div id="client_list_body">
+                                <form action="{% url 'container-to-client' %}" method="post">
+                                    {% csrf_token %}
+                                <input type="text" id="container_status_id" name="container_status_id" hidden>
+                                    {% for client in clients %}
+
+                                        <div class="form-check text-center">
+                                            <label class="form-check-label" for="{{ client }}">
+                                                {{ client }}
+                                            </label>
+                                            <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    value={{ client }}
+                                                    id="flexCheckDefault"
+                                                    name="{{ client.user.username }}"
+                                            />
+                                        </div>
+
+                                    {% endfor %}
+                                    <input type="submit">
+                                </form>
                             </div>
+
                         </div>
 
 
                     </div>
+                    <div class="modal-footer">
+                        <input
+                                type="submit"
+                                class="
+                                  btn btn-light-primary
+                                  text-primary
+                                  font-weight-medium
+                                  waves-effect
+                                  text-start
+                                "
+                                data-bs-dismiss="modal"
+
+                        >
+                    </div>
+
                 </div>
                 <!-- /.modal-content -->
             </div>
@@ -244,6 +278,12 @@
             });
 
         })
+
+        function open_client_modal(pk) {
+            $('#bs-example-modal-xlg').modal('show')
+            document.getElementById('container_status_id').value = pk
+        }
+
 
     </script>
 {% endblock %}

@@ -3,10 +3,11 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DeleteView
 
-
 from container_status.models import ContainerStatus
+from staff.models import Client
 
 
 class ContainerStatusList(ListView):
@@ -33,4 +34,15 @@ class ContainerStatusListByTrain(ListView):
         return ContainerStatus.objects.filter(train_id=train_id)
 
 
-
+class ConnectContainerToClient(View):
+    def post(self, request):
+        clients = Client.objects.all()
+        checked_clients_name = []
+        container_status_id = request.POST.get('container_status_id', False)
+        for client in clients:
+            if request.POST.get(client.user.username, False):
+                checked_clients_name.append(request.POST.get(client.user.username, False))
+        container_status = ContainerStatus.objects.get(id=container_status_id)
+        for checked_client_name in checked_clients_name:
+            container_status.clients.add(clients.get(user__username=checked_client_name))
+        return redirect('container-status-list')

@@ -9,8 +9,6 @@ from terminal.models import ContainerInTerminal
 from train.models import Train
 
 
-
-
 class ContainerStatus(models.Model):
     train = models.ForeignKey(Train, related_name='container_status', on_delete=models.CASCADE)
     container_in_terminal = models.OneToOneField(ContainerInTerminal, related_name='container_statuses',
@@ -18,5 +16,3 @@ class ContainerStatus(models.Model):
 
     def __str__(self):
         return self.container_in_terminal.container.name
-
-
