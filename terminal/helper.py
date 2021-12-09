@@ -2,6 +2,7 @@ from terminal.models import ContainerInTerminal, ContainerInTerminalDocument, Co
 
 
 def upload_container_documents_inner(documents):
+    print(documents)
     for document in documents:
         containers_in_terminal = ContainerInTerminal.objects.filter(container__name=str(document.name)[:11])
         if containers_in_terminal.exists():

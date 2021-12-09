@@ -1,4 +1,8 @@
 {% extends '_base_external.html' %}
+{% load static %}
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/crud.css' %}">
+{% endblock %}
 {% block sidebar %}
     {% for train in trains_by_client %}
         <li class="sidebar-item">
