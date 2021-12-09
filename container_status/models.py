@@ -11,8 +11,10 @@ from train.models import Train
 
 class ContainerStatus(models.Model):
     train = models.ForeignKey(Train, related_name='container_status', on_delete=models.CASCADE)
-    container_in_terminal = models.OneToOneField(ContainerInTerminal, related_name='container_statuses',
-                                                 on_delete=models.CASCADE, blank=True, null=True)
+    # container_in_terminal = models.OneToOneField(ContainerInTerminal, related_name='container_statuses',
+    #                                              on_delete=models.CASCADE, blank=True, null=True)
+    container_in_terminal = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return self.container_in_terminal.container.name
+        # return self.container_in_terminal.container.name
+        return self.container_in_terminal
