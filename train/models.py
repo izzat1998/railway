@@ -12,6 +12,8 @@ class Train(models.Model):
         ('import', 'import'))
     name = models.CharField(max_length=100)
     type = models.CharField(max_length=100, choices=choices)
+    terminal = models.CharField(max_length=100, blank=True, null=True)
+
     # terminal = models.ForeignKey(Terminal, on_delete=models.SET_NULL, related_name='trains', null=True)
 
     def __str__(self):
