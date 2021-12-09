@@ -25,10 +25,8 @@ class ClientData(View):
                                                                            'trains_by_client': trains})
             elif staff.exists():
                 return HttpResponseRedirect(reverse_lazy('terminal-list'))
-        else:
-
-            return render(request, 'clients/table_list.html', context={'container_status_list': container_status,
-                                                                       'trains_by_client': trains})
+        return render(request, 'clients/table_list.html', context={'container_status_list': container_status,
+                                                                   'trains_by_client': trains})
 
 
 class ClientDataByTrain(View):
