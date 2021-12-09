@@ -94,8 +94,7 @@
                                     {% for container_status in container_status_list %}
                                         <tr>
                                             <td class="text-center">{{ forloop.counter }}</td>
-                                            <td class="text-center"><a
-                                                    href="{% url 'train-list' %}"> {{ container_status.train.name }}</a>
+                                            <td class="text-center">{{ container_status.train.name }}
                                             </td>
                                             <td class="text-center">{{ container_status.container_in_terminal.container.name }}</td>
                                             <td class="text-center">
