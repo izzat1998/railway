@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'railway.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
+        'NAME': 'interrail',
         'USER': 'izzat',
         'HOST': 'localhost',
         'PASSWORD': '1',
